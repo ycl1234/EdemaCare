@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 public abstract class BaseFraActivity extends FragmentActivity {
-	protected abstract Fragment createFragmetn() ;
+	protected abstract Fragment createFragment() ;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -18,7 +18,7 @@ public abstract class BaseFraActivity extends FragmentActivity {
 		FragmentManager fm = getSupportFragmentManager();
 		Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 		if(fragment == null){
-			fragment = createFragmetn();
+			fragment = createFragment();
 			fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
 		}
 	}
