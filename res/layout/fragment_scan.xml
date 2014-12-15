@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/bt_scan"
         android:layout_width="match_parent"
-        android:layout_height="256dip"
+        android:layout_height="150dp"
         android:padding="12dip"
         />
   

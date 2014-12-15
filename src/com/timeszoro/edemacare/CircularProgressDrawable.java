@@ -15,11 +15,19 @@
  */
 package com.timeszoro.edemacare;
 
+import com.example.edemacare.R;
+import com.example.edemacare.R.color;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -34,6 +42,7 @@ import android.graphics.drawable.Drawable;
  * @author Saul Diaz <sefford@gmail.com>
  */
 public class CircularProgressDrawable extends Drawable {
+	private Context mContext;
     /**
      * Factor to convert the factor to paint the arc.
      * <p/>
@@ -108,7 +117,7 @@ public class CircularProgressDrawable extends Drawable {
     /**
      * Width of the filling ring.
      */
-    protected final int ringWidth;
+    protected int ringWidth;
     /**
      * Scale of the inner circle. It will affect the inner circle size on this equation:
      * ([Biggest length of the Drawable] / 2) - (ringWidth / 2) * scale.
@@ -128,8 +137,9 @@ public class CircularProgressDrawable extends Drawable {
      * @param ringColor    Color for the filled ring
      * @param centerColor  Color for the center element
      */
-    CircularProgressDrawable(int ringWidth, float circleScale, int outlineColor, int ringColor, int centerColor) {
-        this.progress = 0;
+    CircularProgressDrawable(Context context,int ringWidth, float circleScale, int outlineColor, int ringColor, int centerColor) {
+        this.mContext = context;
+    	this.progress = 0;
         this.outlineColor = outlineColor;
         this.ringColor = ringColor;
         this.centerColor = centerColor;
@@ -152,20 +162,33 @@ public class CircularProgressDrawable extends Drawable {
         float offsetX = (bounds.width() - outerRadius * 2) / 2;
         float offsetY = (bounds.height() - outerRadius * 2) / 2;
 
-        // Outline Circle
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
-        paint.setColor(outlineColor);
+        Bitmap bmp=BitmapFactory.decodeResource(mContext.getResources(), R.drawable.scan_btn);
+        canvas.drawBitmap(bmp, null, new Rect(bounds.left + (bounds.width() - size)/2, bounds.top, bounds.right  - (bounds.width() - size)/2, bounds.bottom),paint);
+        
+        
+        // Outline ring
+       /* paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setColor(color.outcircle_bg);
+//        paint.setStrokeWidth(2);
+        paint.setShadowLayer(4.0f, 0.0f, 2.0f, Color.RED);
+        
+        
         canvas.drawCircle(bounds.centerX(), bounds.centerY(), outerRadius, paint);
 
         // Inner circle
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(centerColor);
+        paint.setColor(color.outcircle_bg);
+        paint.setShadowLayer(4.0f, 0.0f, 2.0f, Color.RED);
         canvas.drawCircle(bounds.centerX(), bounds.centerY(), innerRadius, paint);
-
+        
+        
+        */
+        
+        ringWidth = size * 1/7;
         int halfRingWidth = ringWidth / 2;
-        float arcX0 = offsetX + halfRingWidth;
-        float arcY0 = offsetY + halfRingWidth;
+        float arcX0 = offsetX + halfRingWidth ;
+        float arcY0 = offsetY + halfRingWidth -1;
         float arcX = offsetX + outerRadius * 2 - halfRingWidth;
         float arcY = offsetY + outerRadius * 2 - halfRingWidth;
 
@@ -173,6 +196,7 @@ public class CircularProgressDrawable extends Drawable {
         paint.setColor(ringColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(ringWidth);
+//        paint.setStrokeWidth(ringWidth;
         paint.setStrokeCap(Paint.Cap.ROUND);
         arcElements.set(arcX0, arcY0, arcX, arcY);
         if (indeterminate) {
@@ -331,7 +355,10 @@ public class CircularProgressDrawable extends Drawable {
      * @author Saul Diaz <sefford@gmail.com>
      */
     public static class Builder {
-
+    	/**
+    	 * 
+    	 */
+    	Context context;
         /**
          * Witdh of the stroke of the filled ring
          */
@@ -415,8 +442,13 @@ public class CircularProgressDrawable extends Drawable {
          * @return New CircularProgressDrawableInstance
          */
         public CircularProgressDrawable create() {
-            return new CircularProgressDrawable(ringWidth, circleScale, outlineColor, ringColor, centerColor);
+            return new CircularProgressDrawable(context,ringWidth, circleScale, outlineColor, ringColor, centerColor);
         }
+        
+        public Builder setContext(Context context) {
+			this.context = context;
+			return this;
+		}
 
     }
 }

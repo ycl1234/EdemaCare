@@ -42,10 +42,8 @@ public class ScanProFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_scan, container, false);
 		ImageView scanImg = (ImageView)v.findViewById(R.id.bt_scan);
 		mDrawable = new CircularProgressDrawable.Builder()
-        .setRingWidth(getResources().getDimensionPixelSize(R.dimen.drawable_ring_size))
-        .setOutlineColor(getResources().getColor(android.R.color.darker_gray))
-        .setRingColor(getResources().getColor(android.R.color.holo_green_light))
-        .setCenterColor(getResources().getColor(android.R.color.holo_blue_dark))
+		.setContext(getActivity())
+        .setRingColor(getResources().getColor(R.color.ring_color))
         .create();
 		scanImg.setImageDrawable(mDrawable);
 		scanImg.setOnClickListener(new View.OnClickListener() {
@@ -79,14 +77,16 @@ public class ScanProFragment extends Fragment {
         progressAnimation.setDuration(duration);
         progressAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ObjectAnimator colorAnimator = ObjectAnimator.ofInt(mDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
-                getResources().getColor(android.R.color.holo_red_dark),
-                getResources().getColor(android.R.color.holo_green_light));
-        colorAnimator.setEvaluator(new ArgbEvaluator());
-        colorAnimator.setDuration(duration);
-
-        animation.playTogether(progressAnimation, colorAnimator);
-        return animation;
+        
+        return progressAnimation;
+//        ObjectAnimator colorAnimator = ObjectAnimator.ofInt(mDrawable, CircularProgressDrawable.RING_COLOR_PROPERTY,
+//                getResources().getColor(android.R.color.holo_red_dark),
+//                getResources().getColor(android.R.color.holo_green_light));
+//        colorAnimator.setEvaluator(new ArgbEvaluator());
+//        colorAnimator.setDuration(duration);
+//
+//        animation.playTogether(progressAnimation, colorAnimator);
+//        return animation;
     }
 	
 	
