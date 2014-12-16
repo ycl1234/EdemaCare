@@ -17,5 +17,10 @@ bug #03:E/AndroidRuntime(10676): Caused by: java.lang.ClassNotFoundException: Di
                 3)Select the Order and Export tab.
                 4)From the list make sure the libraries or external jars you added to your project are checked.
                 5)Finally, clean your project & run.
-
+                
+                
+bug #04 error: Error retrieving parent for item: No resource found that matches the given name 
+ 'Theme.AppCompat.Light'.
+    原因是无法找到原来的android-support-v7的支持包，需要重新添加。
+    solution---->http://www.yoyong.com/archives/876
 
