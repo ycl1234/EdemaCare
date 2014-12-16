@@ -18,7 +18,7 @@ public class BleDevicesLab {
 		for(int i = 0; i < 50;i++){
 			BleDevice bleDevice = new BleDevice();
 			bleDevice.setName("ble device #" + i);
-			bleDevice.setID(UUID.randomUUID());
+			bleDevice.setID("ffee- 3f41");
 			mDevices.add(bleDevice);
 		}
 		

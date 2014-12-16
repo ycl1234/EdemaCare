@@ -139,7 +139,7 @@ public class CircularProgressDrawable extends Drawable {
      */
     CircularProgressDrawable(Context context,int ringWidth, float circleScale, int outlineColor, int ringColor, int centerColor) {
         this.mContext = context;
-    	this.progress = 0;
+    	this.progress = 360;
         this.outlineColor = outlineColor;
         this.ringColor = ringColor;
         this.centerColor = centerColor;

@@ -3,17 +3,17 @@ package com.timeszoro.mode;
 import java.util.UUID;
 
 public class BleDevice {
-	private UUID mID;
+	private String mID;
 	private String mName;
 	private boolean mConnectStatus;
 	
 	
 	
 	
-	public UUID getID() {
+	public String getID() {
 		return mID;
 	}
-	public void setID(UUID iD) {
+	public void setID(String iD) {
 		mID = iD;
 	}
 	public String getName() {
