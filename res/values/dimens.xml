@@ -7,4 +7,7 @@
 	<dimen name="ble_size_of_ble_item">60dp</dimen>
 	<dimen name="ble_size_of_scan_button">200dp</dimen>
 	<dimen name="ble_size_of_ble_list">260dp</dimen>
+	
+	<!-- bluetooth device list view -->
+	
 </resources>
