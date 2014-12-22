@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="MyTheme" parent="@android:style/Theme.DeviceDefault"></style>
+    <style name="MyCustomActionBar" parent="@style/MyTheme"></style>
+	<style name="customActionStyle" parent="@style/Widget.AppCompat.ActionBar"> 
+	    <item name="android:background">@color/ble_blackgroud</item>
+	    
+	 </style>
+    	
+</resources>
