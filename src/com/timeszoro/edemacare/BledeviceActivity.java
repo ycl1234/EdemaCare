@@ -5,14 +5,16 @@ package com.timeszoro.edemacare;
 import java.lang.reflect.Field;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
 import com.example.edemacare.R;
 
 
 public class BledeviceActivity extends FragmentActivity {
-
+	private static final String TAG = "BLE_ACTIONBAR";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -46,7 +48,19 @@ public class BledeviceActivity extends FragmentActivity {
         }  
     }  
     
-    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+		case R.id.action_upload:
+			Log.d(TAG, "upload button is clicked");
+			break;
+		case R.id.action_setting:
+			Log.d(TAG, "setting button is clicked");
+		default:
+			break;
+		}
+    	return super.onOptionsItemSelected(item);
+    }
 //	@Override
 //	protected Fragment createFragment() {
 //		return new ScanProFragment();

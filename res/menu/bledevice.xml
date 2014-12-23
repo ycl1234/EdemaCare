@@ -2,11 +2,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.edemacare.BledeviceActivity" >
-
-    <item
+	<item 
+	    android:id="@+id/action_upload"
+	    android:icon="@drawable/ble_upload"
+	    android:title="@string/action_upload"
+	    android:showAsAction="always"
+	    />
+	<item 
+	    android:id="@+id/action_setting"
+	    android:icon="@drawable/ble_setting"
+	    android:title="@string/action_settings"
+	    android:showAsAction="always"
+	    />
+   <!-- <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
-
+        app:showAsAction="never"/> --> 
+	
 </menu>
