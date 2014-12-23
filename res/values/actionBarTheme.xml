@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="CustomActivityTheme" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+       
+        <!-- other activity and action bar styles here -->
+    </style>
+	<style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">  
+        <item name="android:background">#60c37b</item>    
+    </style>  
+    	
+</resources>
