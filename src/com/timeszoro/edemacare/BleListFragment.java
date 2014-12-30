@@ -20,14 +20,15 @@ import android.widget.TextView;
 public class BleListFragment extends ListFragment {
 	private static final String TAG  = "Ble List Fragment";
 	private ArrayList<BleDevice> mDevices;
+	private static BleDevicesAdapter mBleAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		mDevices = BleDevicesLab.getBleLab(getActivity()).getBleList();
-		BleDevicesAdapter bleAdapter = new BleDevicesAdapter(mDevices);
-		this.setListAdapter(bleAdapter);
+		mBleAdapter = new BleDevicesAdapter(mDevices);
+		this.setListAdapter(mBleAdapter);
 		
 	}
 	
@@ -67,5 +68,8 @@ public class BleListFragment extends ListFragment {
 			return convertView;
 		}
 		
+	}
+	public static BleDevicesAdapter getdataAdapter(){
+		return  mBleAdapter;
 	}
 }

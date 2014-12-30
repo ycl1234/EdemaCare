@@ -16,4 +16,15 @@
 	<string name="action_upload">Upload the file</string>
 	<!-- the first view paraments -->
 	<string name="ble_device_list_name">Equipment List</string>
+
+
+	<!-- the device scan -->
+	<string name="ble_not_supported">BLE is not supported</string>
+	<string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+
+	<!--broadcast name-->
+	<string name="ble_scan_broadcast">"com.timeszoro.scan.ble"</string>
+
+
 </resources>

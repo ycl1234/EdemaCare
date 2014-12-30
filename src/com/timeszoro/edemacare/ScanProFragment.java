@@ -1,6 +1,7 @@
 package com.timeszoro.edemacare;
 
 
+import android.content.Intent;
 import com.example.edemacare.R;
 
 import android.animation.Animator;
@@ -50,6 +51,12 @@ public class ScanProFragment extends Fragment {
 			
 			@SuppressLint("NewApi") @Override
 			public void onClick(View v) {
+                //begin scan device
+                String scanBroad =  getString(R.string.ble_scan_broadcast);
+                Intent intent = new Intent(scanBroad);
+                intent.putExtra("BeginScan",true);
+                getActivity().sendBroadcast(intent);
+
 				Log.d(TAG, "scan button is clicked");
 				if(mCurrentAnimation != null){
 					mCurrentAnimation.cancel();
@@ -70,12 +77,16 @@ public class ScanProFragment extends Fragment {
 	//**************different animation for the scan button*******************//
 	@SuppressLint("NewApi") 
     private Animator prepareStyle2Animation() {
+
+
         AnimatorSet animation = new AnimatorSet();
         int  duration = Integer.valueOf(getString(R.string.scan_interval));
         ObjectAnimator progressAnimation = ObjectAnimator.ofFloat(mDrawable, CircularProgressDrawable.PROGRESS_PROPERTY,
                 0f, 1f);
         progressAnimation.setDuration(duration);
         progressAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+
+
 
         
         return progressAnimation;

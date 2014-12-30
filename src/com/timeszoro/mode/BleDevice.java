@@ -1,6 +1,6 @@
 package com.timeszoro.mode;
 
-import java.util.UUID;
+
 
 public class BleDevice {
 	private String mID;
@@ -32,4 +32,24 @@ public class BleDevice {
 	public BleDevice(){
 		
 	}
+
+
+	@Override
+	public boolean equals(Object o) {
+
+		if(this == o) return true;
+		if (o == null)
+			return false;
+		if(!(o instanceof BleDevice))
+			return false;
+
+		final  BleDevice tmp = (BleDevice)o;
+		if(tmp.getID().equals(this.getID()))
+			return false;
+		if(tmp.getName().equals(this.getName()))
+			return false;
+		return true;
+
+	}
+
 }
