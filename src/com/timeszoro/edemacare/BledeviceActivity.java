@@ -135,6 +135,10 @@ public class BledeviceActivity extends FragmentActivity {
 
 
 	public void scanLeDevice(final boolean enable) {
+		//clean the ble device list
+		BleDevicesLab.getBleLab(this).getBleList().clear();
+		BleListFragment.getdataAdapter().notifyDataSetChanged();
+		//begin scan
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.
 			mHandler.postDelayed(new Runnable() {
