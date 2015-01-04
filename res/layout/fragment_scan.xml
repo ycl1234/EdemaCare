@@ -6,9 +6,10 @@
 
     <ImageView
         android:id="@+id/bt_scan"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="150dp"
         android:padding="12dip"
+        android:layout_gravity="center"
         />
   
 

@@ -22,6 +22,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import com.timeszoro.mode.BleDevicesLab;
 
 public class ScanProFragment extends Fragment {
 	private static final String TAG = "scan Fragement";
@@ -51,11 +52,14 @@ public class ScanProFragment extends Fragment {
 			
 			@SuppressLint("NewApi") @Override
 			public void onClick(View v) {
+
+
                 //begin scan device
                 String scanBroad =  getString(R.string.ble_scan_broadcast);
                 Intent intent = new Intent(scanBroad);
                 intent.putExtra("BeginScan",true);
                 getActivity().sendBroadcast(intent);
+
                 //disable the scan button
                 mScanImg.setEnabled(false);
 				Log.d(TAG, "scan button is clicked");
@@ -90,13 +94,12 @@ public class ScanProFragment extends Fragment {
 		});
 		return v;
 	}
-	
-	
-	
-	
-	
-	
-	//**************different animation for the scan button*******************//
+
+    public ImageView getmScanImg() {
+        return mScanImg;
+    }
+
+    //**************different animation for the scan button*******************//
 	@SuppressLint("NewApi") 
     private Animator prepareStyle2Animation() {
 
@@ -204,4 +207,7 @@ public class ScanProFragment extends Fragment {
         animation.playTogether(progressAnimation, innerCircleAnimation, invertedProgress, invertedCircle);
         return animation;
     }
+
+
+
 }

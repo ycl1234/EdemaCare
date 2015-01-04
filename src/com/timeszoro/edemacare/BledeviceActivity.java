@@ -34,7 +34,8 @@ public class BledeviceActivity extends FragmentActivity {
 	private static BluetoothManager mBleManager = null;
 	private static BluetoothAdapter mBleAdapter = null;
 
-
+	private ScanProFragment mScanProFragment;
+	private BleListFragment mBleListFragment;
 	private boolean mScanning;
 	private android.os.Handler mHandler;
 	private int SCAN_PERIOD ;
@@ -45,8 +46,10 @@ public class BledeviceActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bledevice);
 		forceShowOverflowMenu();
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_blelist, new BleListFragment()).commit();
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_scanbtn, new ScanProFragment()).commit();
+		mScanProFragment = new ScanProFragment();
+		mBleListFragment = new BleListFragment();
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_blelist, mBleListFragment).commit();
+		getSupportFragmentManager().beginTransaction().add(R.id.fragment_scanbtn, mScanProFragment).commit();
 
 		//init
 		mHandler = new android.os.Handler();
@@ -79,12 +82,16 @@ public class BledeviceActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		//enable the ble
 		if (!mBleAdapter.isEnabled()) {
 			if (!mBleAdapter.isEnabled()) {
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 			}
 		}
+		//enable the scan button
+		mScanProFragment.getmScanImg().setEnabled(true);
+
 	}
 
 	@Override
