@@ -40,15 +40,12 @@ public class BleDevice {
 		if(this == o) return true;
 		if (o == null)
 			return false;
-		if(!(o instanceof BleDevice))
+		if(!(o instanceof  BleDevice)){
 			return false;
-
+		}
 		final  BleDevice tmp = (BleDevice)o;
-		if(tmp.getID().equals(this.getID()))
-			return false;
-		if(tmp.getName().equals(this.getName()))
-			return false;
-		return true;
+		return tmp.getID().equals(this.getID());
+
 
 	}
 

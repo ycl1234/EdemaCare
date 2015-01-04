@@ -27,12 +27,12 @@ public class ScanProFragment extends Fragment {
 	private static final String TAG = "scan Fragement";
 	CircularProgressDrawable mDrawable;
 	Animator mCurrentAnimation;
-	
-	@Override
+    ImageView mScanImg;
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		
 	}
 	
@@ -41,13 +41,13 @@ public class ScanProFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_scan, container, false);
-		ImageView scanImg = (ImageView)v.findViewById(R.id.bt_scan);
+		mScanImg = (ImageView)v.findViewById(R.id.bt_scan);
 		mDrawable = new CircularProgressDrawable.Builder()
 		.setContext(getActivity())
         .setRingColor(getResources().getColor(R.color.ring_color))
         .create();
-		scanImg.setImageDrawable(mDrawable);
-		scanImg.setOnClickListener(new View.OnClickListener() {
+        mScanImg.setImageDrawable(mDrawable);
+        mScanImg.setOnClickListener(new View.OnClickListener() {
 			
 			@SuppressLint("NewApi") @Override
 			public void onClick(View v) {
@@ -56,14 +56,36 @@ public class ScanProFragment extends Fragment {
                 Intent intent = new Intent(scanBroad);
                 intent.putExtra("BeginScan",true);
                 getActivity().sendBroadcast(intent);
-
+                //disable the scan button
+                mScanImg.setEnabled(false);
 				Log.d(TAG, "scan button is clicked");
-				if(mCurrentAnimation != null){
-					mCurrentAnimation.cancel();
-				}
-				mCurrentAnimation = prepareStyle2Animation();
+                if(mCurrentAnimation != null){
+                    mCurrentAnimation.cancel();
+                }
+                mCurrentAnimation = prepareStyle2Animation();
+                mCurrentAnimation.addListener(new Animator.AnimatorListener(){
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mScanImg.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
 				mCurrentAnimation.start();
-				
+
 			}
 		});
 		return v;

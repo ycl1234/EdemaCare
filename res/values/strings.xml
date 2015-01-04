@@ -8,8 +8,8 @@
 	
 	
 	<!-- ble paraments -->
-	<string name="scan_interval">3600</string>
-	<integer-array name="scan_dur">3600</integer-array>
+	<string name="scan_interval">5000</string>
+
 	
 	
 	<!-- action bar -->

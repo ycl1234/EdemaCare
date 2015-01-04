@@ -3,6 +3,7 @@ package com.timeszoro.edemacare;
 
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 
 import android.bluetooth.BluetoothAdapter;
@@ -168,15 +169,21 @@ public class BledeviceActivity extends FragmentActivity {
 								String str = String.valueOf(device.getName());
 								bleDevice.setID(String.valueOf(device.getAddress()));
 								bleDevice.setName(device.getName());
-								mBleDeviceLab.getBleList().add(bleDevice);
-								BleListFragment.getdataAdapter().notifyDataSetChanged();
-								for (BleDevice d:mBleDeviceLab.getBleList()){
-									if(!d.equals(bleDevice)){
-										//do not  contain the device
-										mBleDeviceLab.getBleList().add(bleDevice);
-										BleListFragment.getdataAdapter().notifyDataSetChanged();
-									}
+								ArrayList<BleDevice> bleList = mBleDeviceLab.getBleList();
+								if(!bleList.contains(bleDevice)){
+									bleList.add(bleDevice);
+									BleListFragment.getdataAdapter().notifyDataSetChanged();
+									Log.d(TAG,"add the device success");
 								}
+
+//								BleListFragment.getdataAdapter().notifyDataSetChanged();
+//								for (BleDevice d:mBleDeviceLab.getBleList()){
+//									if(!d.equals(bleDevice)){
+//										//do not  contain the device
+//										mBleDeviceLab.getBleList().add(bleDevice);
+//										BleListFragment.getdataAdapter().notifyDataSetChanged();
+//									}
+//								}
 							}
 
 
