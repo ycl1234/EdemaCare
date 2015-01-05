@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res/com.example.edemacare"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ble_blackgroud">
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/app_name"/>
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="4dp"
+               android:background="@drawable/ble_list_line_up"
+            />
+    <antistatic.spinnerwheel.WheelHorizontalView
+            android:id="@+id/ble_frequence_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:visibleItems="6"
+            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
+            app:selectionDividerWidth="1px"
+            />
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="4dp"
+               android:background="@drawable/ble_list_line_up"
+            />
+
+
+</LinearLayout>
