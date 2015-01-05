@@ -16,20 +16,22 @@
         android:allowBackup="true"
         android:icon="@drawable/ble_icon"
         android:label="@string/app_name"
-        android:theme="@style/CustomActivityTheme" >
+        android:theme="@style/CustomActivityTheme"
+            >
         <activity
             android:name="com.timeszoro.edemacare.BledeviceActivity"
-            android:label="@string/app_name" 
-           >
-            
+            android:label="@string/app_name">
+
+        </activity>
+
+        <activity android:name="com.timeszoro.edemacare.EdemaActivity"
+                android:label="@string/app_name"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
-        
 
     </application>
 
