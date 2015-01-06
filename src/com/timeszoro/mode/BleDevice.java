@@ -1,5 +1,7 @@
 package com.timeszoro.mode;
-
+/**
+ * Created by Timeszoro on 2014/12/16.
+ */
 
 
 public class BleDevice {

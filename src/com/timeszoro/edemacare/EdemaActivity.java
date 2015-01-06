@@ -1,6 +1,7 @@
 package com.timeszoro.edemacare;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import antistatic.spinnerwheel.AbstractWheel;
@@ -16,10 +17,18 @@ public class EdemaActivity extends Activity {
     private final  int CUR_FRE = 5;
     private final String TAG = "Edema data";
     private int mCurFre = CUR_FRE;
+    private TimeCountFragment mTimerFragment;
+    private ScanProFragment mScanProFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edemashow);
+        //init fragment
+        mTimerFragment = new TimeCountFragment();
+        mScanProFragment = new ScanProFragment();
+        getFragmentManager().beginTransaction().add(R.id.fragment_time_count,mTimerFragment).commit();
+
+
 
         //init the wheel of frequence selection
 

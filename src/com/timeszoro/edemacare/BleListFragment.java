@@ -1,8 +1,13 @@
+/**
+ * Created by Timeszoro on 2014/12/16.
+ */
 package com.timeszoro.edemacare;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
 import com.example.edemacare.R;
 import com.timeszoro.mode.BleDevice;
 import com.timeszoro.mode.BleDevicesLab;
@@ -36,7 +41,10 @@ public class BleListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		BleDevice bleDevice = ((BleDevicesAdapter)getListAdapter()).getItem(position);
 		Log.d(TAG, bleDevice.getName()+" is clicked");
-		
+		Intent intent = new Intent(getActivity(),EdemaActivity.class);
+		startActivity(intent);
+		//需要添加停止扫描的代码
+
 	}
 	
 	class BleDevicesAdapter extends ArrayAdapter<BleDevice>{

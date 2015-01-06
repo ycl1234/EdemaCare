@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-
+/**
+ * Created by Timeszoro on 2014/12/16.
+ */
 public class BleDevicesLab {
 	private static BleDevicesLab mBleLab;
 	private ArrayList<BleDevice> mDevices ;

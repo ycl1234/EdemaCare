@@ -26,5 +26,12 @@
 	<!--broadcast name-->
 	<string name="ble_scan_broadcast">"com.timeszoro.scan.ble"</string>
 
+	<!-- timer count -->
+	<string name="ble_init_timer">"00"</string>
+	<string name="ble_time_spara">":"</string>
+	<string name="ble_sendtime_hours">"hours"</string>
+	<string name="ble_sendtime_mins">"mins"</string>
+	<string name="ble_sendtime_seconds">"seconds"</string>
+	<string name="ble_time_start">"start_count"</string>
 
 </resources>

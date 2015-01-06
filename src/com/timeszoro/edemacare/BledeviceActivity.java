@@ -1,3 +1,6 @@
+/**
+ * Created by Timeszoro on 2014/12/16.
+ */
 package com.timeszoro.edemacare;
 
 
@@ -187,23 +190,9 @@ public class BledeviceActivity extends FragmentActivity {
 									Log.d(TAG,"add the device success");
 								}
 
-//								BleListFragment.getdataAdapter().notifyDataSetChanged();
-//								for (BleDevice d:mBleDeviceLab.getBleList()){
-//									if(!d.equals(bleDevice)){
-//										//do not  contain the device
-//										mBleDeviceLab.getBleList().add(bleDevice);
-//										BleListFragment.getdataAdapter().notifyDataSetChanged();
-//									}
-//								}
+
 							}
-
-
-
-
-
-
-							//mLeDeviceListAdapter.addDevice(device);
-							//mLeDeviceListAdapter.notifyDataSetChanged();
+;
 						}
 					});
 				}
