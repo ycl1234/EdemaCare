@@ -29,23 +29,32 @@ public class TimeCountFragment extends Fragment {
     private IntentFilter mFilter;
     //Service Connection
     private boolean mConnected = false;
-
+    private static boolean existed = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //init
+
         mReceiver = new TimerFromServieReceiver();
         mFilter = new IntentFilter();
         mFilter.addAction(ACTION_SERVICE_2_ACTIVITY);
         //bind service
-        Intent intent = new Intent(getActivity(), TimerService.class);
-        getActivity().bindService(intent,conn,Context.BIND_AUTO_CREATE);
+        if(!existed){
+            Intent intent = new Intent(getActivity(), TimerService.class);
+            getActivity().bindService(intent,conn,Context.BIND_AUTO_CREATE);
+            existed = false;
+        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getActivity().registerReceiver(mReceiver,mFilter);
+//        mHoursText.setText("00");
+//        mMinText.setText("00");
+//        mSecondText.setText("00");
     }
 
     @Override

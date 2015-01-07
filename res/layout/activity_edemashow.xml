@@ -35,4 +35,10 @@
             android:layout_height="wrap_content"
             android:background="@color/ble_blackgroud">
     </FrameLayout>
+    <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
 </LinearLayout>

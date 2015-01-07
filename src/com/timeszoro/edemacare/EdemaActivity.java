@@ -9,6 +9,7 @@ import antistatic.spinnerwheel.OnWheelScrollListener;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import com.example.edemacare.R;
 
+
 /**
  * Created by Administrator on 2015/1/5.
  */
@@ -27,6 +28,7 @@ public class EdemaActivity extends Activity {
         mTimerFragment = new TimeCountFragment();
         mScanProFragment = new ScanProFragment();
         getFragmentManager().beginTransaction().add(R.id.fragment_time_count,mTimerFragment).commit();
+
 
 
 
