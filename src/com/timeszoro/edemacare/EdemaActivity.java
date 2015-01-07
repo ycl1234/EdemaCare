@@ -8,7 +8,9 @@ import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelScrollListener;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import com.example.edemacare.R;
-
+import com.github.mikephil.charting.charts.*;
+import com.github.mikephil.charting.data.*;
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2015/1/5.
@@ -19,14 +21,17 @@ public class EdemaActivity extends Activity {
     private final String TAG = "Edema data";
     private int mCurFre = CUR_FRE;
     private TimeCountFragment mTimerFragment;
-    private ScanProFragment mScanProFragment;
+
+
+    //information of the data chart
+    LineChart mLineChart ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edemashow);
         //init fragment
         mTimerFragment = new TimeCountFragment();
-        mScanProFragment = new ScanProFragment();
+
         getFragmentManager().beginTransaction().add(R.id.fragment_time_count,mTimerFragment).commit();
 
 
@@ -55,5 +60,42 @@ public class EdemaActivity extends Activity {
 
             }
         });
+
+        //init the data chart
+        mLineChart = (LineChart)findViewById(R.id.chart1);
+        mLineChart.setDrawGridBackground(false);//do not draw the grid
+        mLineChart.setDrawYValues(false);//do not draw the y value into the chart
+        mLineChart.setHighlightEnabled(true);
+        mLineChart.setTouchEnabled(true);// enable touch gestures
+        mLineChart.setDragEnabled(true);// enable scaling and dragging
+        mLineChart.setScaleEnabled(true);
+        mLineChart.setPinchZoom(false);// if disabled, scaling can be done on x- and y-axis separately
+         //add the data of the chart
+        int x = 20;
+        int y = 50;
+        ArrayList<String> xVals = new ArrayList<String>();
+        for (int i = 0; i < x; i++) {
+            xVals.add((i) + "");
+        }
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        for (int z = 0; z < 3; z++) {
+
+            ArrayList<Entry> values = new ArrayList<Entry>();
+
+            for (int i = 0; i < x; i++) {
+                double val = (Math.random() * y) + 3;
+                values.add(new Entry((float) val, i));
+            }
+
+            LineDataSet d = new LineDataSet(values, "DataSet " + (z + 1));
+            d.setLineWidth(2.5f);
+            d.setCircleSize(4f);
+
+
+            dataSets.add(d);
+        }
+        LineData lineData = new LineData(xVals,dataSets);
+        mLineChart.setData(lineData);
+        mLineChart.invalidate();
     }
 }
