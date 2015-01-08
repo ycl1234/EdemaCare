@@ -5,36 +5,99 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/ble_blackgroud">
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/app_name"/>
+    <LinearLayout  android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:layout_marginTop="8dp">
+        <ImageView  android:layout_width="30dp"
+                    android:layout_height="17dp"
+                    android:background="@drawable/frequence"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="4dp"
+                    />
+        <TextView   android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ble_frequence"
+                    android:textSize="19dp"
+                    android:textColor="@color/ble_front_color"/>
+        <TextView   android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ble_frequence_scale"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="12dp"
+                    android:textColor="@color/ble_front_color"/>
+    </LinearLayout>
+
 
     <ImageView android:layout_width="match_parent"
-               android:layout_height="4dp"
+               android:layout_height="1dp"
                android:background="@drawable/ble_list_line_up"
+               android:layout_marginTop="8dp"
+               android:layout_marginBottom="-4dp"
+
             />
     <antistatic.spinnerwheel.WheelHorizontalView
             android:id="@+id/ble_frequence_selection"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_margin="5dp"
             app:visibleItems="6"
-            app:selectionDivider="@drawable/divider_dark_gradient_horizontal"
-            app:selectionDividerWidth="1px"
+            app:selectionDivider="@drawable/iterator"
+            app:selectionDividerWidth="26px"
+
+
             />
 
     <ImageView android:layout_width="match_parent"
-               android:layout_height="4dp"
+               android:layout_height="1dp"
                android:background="@drawable/ble_list_line_up"
+               android:layout_marginBottom="8dp"
+               android:layout_marginTop="-4dp"
             />
-    <DigitalClock android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"/>
-    <FrameLayout
-            android:id="@+id/fragment_time_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/ble_blackgroud">
-    </FrameLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="2dp"
+                  android:orientation="horizontal"
+              >
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:background="@drawable/data"
+                           android:layout_marginLeft="20dp"
+                           android:layout_marginRight="10dp"
+
+                           android:layout_marginBottom="10dp"/>
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/ble_edema_data"
+                          android:textSize="20dp"
+                          android:layout_marginTop="3dp"
+                          android:textColor="@color/ble_front_color"/>
+    </LinearLayout>
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:background="@drawable/ble_list_line_up"
+               android:layout_marginBottom="5dp"
+            />
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:layout_gravity="center">
+        <ImageView android:layout_width="34dp"
+                   android:layout_height="32dp"
+
+                   android:background="@drawable/clock"
+
+                   android:layout_marginRight="20dp"
+                   android:layout_marginTop="8dp"/>
+        <FrameLayout
+                android:id="@+id/fragment_time_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ble_blackgroud">
+        </FrameLayout>
+    </LinearLayout>
+
     <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart1"
             android:layout_width="match_parent"

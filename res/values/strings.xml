@@ -26,6 +26,11 @@
 	<!--broadcast name-->
 	<string name="ble_scan_broadcast">"com.timeszoro.scan.ble"</string>
 
+
+	<!-- Second View -->
+	<string name="ble_frequence">Frequence</string>
+	<string name="ble_frequence_scale">(*10KHz)</string>
+	<string name="ble_edema_data">Edema Monitor</string>
 	<!-- timer count -->
 	<string name="ble_init_timer">"00"</string>
 	<string name="ble_time_spara">":"</string>

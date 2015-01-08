@@ -1,7 +1,6 @@
 package com.timeszoro.edemacare;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import antistatic.spinnerwheel.AbstractWheel;
@@ -10,6 +9,8 @@ import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import com.example.edemacare.R;
 import com.github.mikephil.charting.charts.*;
 import com.github.mikephil.charting.data.*;
+import com.timeszoro.fragment.TimeCountFragment;
+
 import java.util.ArrayList;
 
 /**

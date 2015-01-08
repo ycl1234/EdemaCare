@@ -24,8 +24,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import com.example.edemacare.R;
+import com.timeszoro.fragment.BleListFragment;
+import com.timeszoro.fragment.ScanProFragment;
 import com.timeszoro.mode.BleDevice;
 import com.timeszoro.mode.BleDevicesLab;
 
@@ -147,7 +150,7 @@ public class BledeviceActivity extends FragmentActivity {
 	public void scanLeDevice(final boolean enable) {
 		//clean the ble device list
 		BleDevicesLab.getBleLab(this).getBleList().clear();
-		BleListFragment.getdataAdapter().notifyDataSetChanged();
+		((BleListFragment.BleDevicesAdapter)BleListFragment.getdataAdapter()).notifyDataSetChanged();
 		//begin scan
 		if (enable) {
 			// Stops scanning after a pre-defined scan period.

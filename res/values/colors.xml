@@ -4,5 +4,5 @@
     <color name="ble_blackgroud">#ffffeb</color>
     <color name="outcircle_bg">#e3fafa</color>
     <color name="ring_color">#60c37b</color>
-
+    <color name="ble_front_color">#988466</color>
 </resources>

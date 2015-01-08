@@ -333,6 +333,7 @@ public class WheelHorizontalView extends AbstractWheelView {
         canvas.save();
         int w = getMeasuredWidth();
         int h = getMeasuredHeight();
+
         int iw = getItemDimension();
 
         // resetting intermediate bitmap and recreating canvases
@@ -349,26 +350,26 @@ public class WheelHorizontalView extends AbstractWheelView {
 
         if (mSelectionDivider != null) {
             // draw the top divider
-            int leftOfLeftDivider = (getWidth() - iw - mSelectionDividerWidth) / 2;
-            int rightOfLeftDivider = leftOfLeftDivider + mSelectionDividerWidth;
+            int leftOfLeftDivider = (getWidth() -  mSelectionDividerWidth) / 2 ;
+            int rightOfLeftDivider = leftOfLeftDivider +  mSelectionDividerWidth ;
             cSeparators.save();
             // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
-            cSeparators.clipRect(leftOfLeftDivider, 0, rightOfLeftDivider, h);
-            mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, h);
+            cSeparators.clipRect(leftOfLeftDivider, 0, rightOfLeftDivider, h );
+            mSelectionDivider.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, h );
             mSelectionDivider.draw(cSeparators);
             cSeparators.restore();
 
-            cSeparators.save();
-            // draw the bottom divider
-            int leftOfRightDivider =  leftOfLeftDivider + iw;
-            int rightOfRightDivider = rightOfLeftDivider + iw;
-            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
-            cSeparators.clipRect(leftOfRightDivider, 0, rightOfRightDivider, h);
-            mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, h);
-            mSelectionDivider.draw(cSeparators);
-            cSeparators.restore();
-        }
-
+//            cSeparators.save();
+//            // draw the bottom divider
+//            int leftOfRightDivider =  leftOfLeftDivider + iw;
+//            int rightOfRightDivider = rightOfLeftDivider + iw;
+//            // On Gingerbread setBounds() is ignored resulting in an ugly visual bug.
+//            cSeparators.clipRect(leftOfRightDivider, 0, rightOfRightDivider, h);
+//            mSelectionDivider.setBounds(leftOfRightDivider, 0, rightOfRightDivider, h);
+//            mSelectionDivider.draw(cSeparators);
+//            cSeparators.restore();
+//        }
+            }
         cSpin.drawRect(0, 0, w, h, mSelectorWheelPaint);
         cSeparators.drawRect(0, 0, w, h, mSeparatorsPaint);
 

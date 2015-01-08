@@ -1,4 +1,4 @@
-package com.timeszoro.edemacare;
+package com.timeszoro.fragment;
 
 import android.app.Fragment;
 import android.content.*;
