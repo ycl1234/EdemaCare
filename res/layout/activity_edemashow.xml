@@ -82,7 +82,8 @@
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
-                  android:layout_gravity="center">
+                  android:layout_gravity="center"
+                  android:layout_marginTop="8dp">
         <ImageView android:layout_width="34dp"
                    android:layout_height="32dp"
 
@@ -97,11 +98,16 @@
                 android:background="@color/ble_blackgroud">
         </FrameLayout>
     </LinearLayout>
-
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:background="@drawable/ble_list_line_up"
+               android:layout_marginBottom="5dp"
+            />
     <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
             />
 
 </LinearLayout>
