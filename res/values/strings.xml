@@ -39,4 +39,8 @@
 	<string name="ble_sendtime_seconds">"seconds"</string>
 	<string name="ble_time_start">"start_count"</string>
 
+
+	<!--GATT connection-->
+	<string name="connected">Connected</string>
+	<string name="disconnected">Disconnected</string>
 </resources>

@@ -3,18 +3,19 @@ package com.timeszoro.mode;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 /**
  * Created by Timeszoro on 2014/12/16.
  */
 public class BleDevicesLab {
 	private static BleDevicesLab mBleLab;
-	private ArrayList<BleDevice> mDevices ;
+	private ArrayList<BluetoothDevice> mDevices ;
 	private Context mAppContext;
 	
 	public BleDevicesLab(Context context) {
 		mAppContext = context;
-		mDevices = new ArrayList<BleDevice>();
+		mDevices = new ArrayList<BluetoothDevice>();
 		
 		// get the ble devices by scan , and add to the mDevices Array
 //		for(int i = 0; i < 50;i++){
@@ -33,11 +34,11 @@ public class BleDevicesLab {
 		return mBleLab;
 	}
 	
-	public BleDevice getBleDevice(){
+	public BluetoothDevice getBleDevice(){
 		return mDevices.get(0);
 	}
 	
-	public  ArrayList<BleDevice> getBleList(){
+	public  ArrayList<BluetoothDevice> getBleList(){
 		return mDevices;
 	}
 }

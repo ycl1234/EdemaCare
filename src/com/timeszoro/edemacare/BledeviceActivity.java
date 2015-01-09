@@ -42,7 +42,7 @@ public class BledeviceActivity extends FragmentActivity {
 
 	private ScanProFragment mScanProFragment;
 	private BleListFragment mBleListFragment;
-	private boolean mScanning;
+	private boolean mScanning;//
 	private android.os.Handler mHandler;
 	private int SCAN_PERIOD ;
 	private BleDevicesLab mBleDeviceLab;
@@ -180,15 +180,10 @@ public class BledeviceActivity extends FragmentActivity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							//add the device to the list
-							BleDevice bleDevice = new BleDevice();
 							if(device != null){
-								String str = String.valueOf(device.getName());
-								bleDevice.setID(String.valueOf(device.getAddress()));
-								bleDevice.setName(device.getName());
-								ArrayList<BleDevice> bleList = mBleDeviceLab.getBleList();
-								if(!bleList.contains(bleDevice)){
-									bleList.add(bleDevice);
+								ArrayList<BluetoothDevice> bleList = mBleDeviceLab.getBleList();
+								if(!bleList.contains(device)){
+									bleList.add(device);
 									BleListFragment.getdataAdapter().notifyDataSetChanged();
 									Log.d(TAG,"add the device success");
 								}
@@ -224,4 +219,10 @@ public class BledeviceActivity extends FragmentActivity {
 		}
 	};
 
+	public void setScanning(boolean scan) {
+		this.mScanning = scan;
+	}
+	public boolean getScanning(){
+		return mScanning;
+	}
 }

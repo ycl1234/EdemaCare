@@ -34,8 +34,8 @@
         </activity>
         <service android:name="com.timeszoro.service.TimerService"
                  >
-
         </service>
+        <service android:name="com.timeszoro.edemacare.BluetoothLeService"></service>
 
     </application>
 
