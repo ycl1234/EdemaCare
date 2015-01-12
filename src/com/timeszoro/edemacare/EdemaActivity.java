@@ -28,7 +28,7 @@ import java.util.UUID;
  * Created by Administrator on 2015/1/5.
  */
 public class EdemaActivity extends Activity implements OnChartValueSelectedListener{
-    private static final int GATT_TIMEOUT = 200; // milliseconds
+    private static final int GATT_TIMEOUT = 500; // milliseconds
     private final  int CUR_FRE = 5;
     private final String TAG = "Edema data";
     private final String CONNECT_STATUS = "Connect status";
@@ -52,7 +52,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     //status of the Gatt
     private boolean mConnected;
     private boolean mServiceReady = false;
-
+    //index of the data received
+    private static int mIndexofData = 0;//0->fre; 1,2->Impedance;3,4->Phase
+    private int mDataTmp = 0;//tmp for the data received
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,17 +216,22 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     writetoCharacter();
                 }
+                Log.d(CONNECT_STATUS, "Gatt Service discovered");
 
             } else if (BluetoothLeService.ACTION_DATA_WRITE.equals(action)) {
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 enableDataTran();
+                Log.d(CONNECT_STATUS, "action data write");
             } else if (BluetoothLeService.ACTION_DATA_READ.equals(action)) {
-
+                Log.d(CONNECT_STATUS, "action data read");
             } else if (BluetoothLeService.ACTION_DATA_NOTIFY.equals(action)) {
                 // Notification
                 final byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 Log.d(TAG, "onCharacteristChanged " + uuidStr);
+                Log.d(TAG,"data received "+Integer.valueOf(value[0]));
+
+
 
 //                String shortUUIDString = GattInfo.toShortUuidStr(UUID.fromString(uuidStr));
 //                /***********************��ʾX�������******************************/
@@ -343,9 +350,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         }
 
         private void enableDataTran() {
-            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_IMPEDANCE_MEASUREMENT), true);
+//            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_IMPEDANCE_MEASUREMENT), true);
             enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_PHA_MEASUREMENT), true);
-            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_FRE_MEASUREMENT), true);
+//            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_FRE_MEASUREMENT), true);
 
 
         }
@@ -355,7 +362,7 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
             BluetoothGattCharacteristic characteristic = serv.getCharacteristic(charaUuid);
             mBleService.setCharacteristicNotification(characteristic, true);
             mBleService.waitIdle(GATT_TIMEOUT);
-
+            Log.i(TAG,"enable the uuid " + charaUuid.toString());
 
 
         }
