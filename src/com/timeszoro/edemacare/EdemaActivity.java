@@ -19,6 +19,7 @@ import com.github.mikephil.charting.utils.*;
 import com.github.mikephil.charting.utils.XLabels.XLabelPosition;
 import com.timeszoro.edemadata.EdemaData;
 import com.timeszoro.fragment.TimeCountFragment;
+import com.timeszoro.fragment.TimeCountPreFragment;
 import com.timeszoro.service.BluetoothLeService;
 
 import java.util.UUID;
@@ -52,9 +53,21 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     //status of the Gatt
     private boolean mConnected;
     private boolean mServiceReady = false;
+    private boolean mEnableColcok = false;
+
+
     //index of the data received
-    private static int mIndexofData = 0;//0->fre; 1,2->Impedance;3,4->Phase
+    private static int mIndexofData = 0;//0->fre; 1,2->Impedance;3->Phase
     private int mDataTmp = 0;//tmp for the data received
+    private boolean mTobeShow = false;
+
+
+    private EdemaData mEdemaData;
+    private int mEdemaDataFre;
+    private int mEdemaDataImp;
+    private int mEdemaDataPha;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +78,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
         //init fragment
+        TimeCountPreFragment preFragment = new TimeCountPreFragment();
         mTimerFragment = new TimeCountFragment();
-        getFragmentManager().beginTransaction().add(R.id.fragment_time_count,mTimerFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.fragment_time_count,preFragment).commit();
 
 
 
@@ -109,16 +123,16 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         xl.setCenterXLabelText(true);
          //add the data of the chart
         int num = 20;
-        EdemaData edemaData = EdemaData.getEdemaDataHandle();
-        edemaData.setmDataNum(num);
+        mEdemaData = EdemaData.getEdemaDataHandle();
+        mEdemaData.setmDataNum(num);
         for(int i = 0; i < 3 * num; i++){
-            edemaData.addXVals(String.valueOf(i));
+            mEdemaData.addXVals(String.valueOf(i));
         }
         for (int i = 0;i < 3 * num;i++){
-            edemaData.addImpVal(i);
-            edemaData.addPhaVal(i * 2);
+            mEdemaData.addImpVal(i);
+            mEdemaData.addPhaVal(i * 2);
         }
-        mLineChart.setData(edemaData.getLineData());
+        mLineChart.setData(mEdemaData.getLineData());
         mLineChart.invalidate();
         mLineChart.setOnChartValueSelectedListener(this);
         //begin bind the ble service
@@ -230,7 +244,8 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 Log.d(TAG, "onCharacteristChanged " + uuidStr);
                 Log.d(TAG,"data received "+Integer.valueOf(value[0]));
-
+                enableColock();
+                splitEdemaData((value[0] & 0xff));
 
 
 //                String shortUUIDString = GattInfo.toShortUuidStr(UUID.fromString(uuidStr));
@@ -367,5 +382,77 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
 
         }
 
+    /** Functions for data process of the edema data
+     *  function 1: split data of the received data
+     *  function 2: begin the time clock;
+     */
+    public void splitEdemaData(int value){
+
+            switch (mIndexofData){
+                case 0:
+                    if(value == mCurFre){
+                        mTobeShow = true;//according to the selected frequence ,whether show or not
+                    }
+                    mEdemaDataFre = value;
+                    mIndexofData ++;
+                    break;
+                case 1:
+
+                    mDataTmp = value;
+                    mIndexofData ++;
+                    break;
+                case 2:
+                    mEdemaDataImp = mDataTmp + value;// to be modified
+                    Log.d(TAG,"edema Imp "+ String.valueOf(mEdemaDataImp));
+                    if(mTobeShow){
+                        //if show in the chart ,add the data to the EdemaData
+                        mEdemaData.addImpVal(mEdemaDataImp);
+                    }
+                    mIndexofData ++;
+                    break;
+                case 3:
+
+                    mEdemaDataPha = value;
+                    if(mTobeShow){
+                        mEdemaData.addPhaVal(mEdemaDataPha);
+                        mLineChart.invalidate();
+
+                        mTobeShow = false;
+                    }
+
+
+                    //insert the data in the SQL
+
+                    //back to next fre
+                    mIndexofData = 0;
+                    break;
+
+            }
+
+
+    }
+
+
+    public void enableColock(){
+        if (mTimerFragment == null){
+            mTimerFragment = new TimeCountFragment();
+        }
+        getFragmentManager().beginTransaction().replace(R.id.fragment_time_count,mTimerFragment).commit();
+        if(!mEnableColcok){
+            if(TimeCountFragment.beginCountTime()){
+                mEnableColcok = true;
+            }
+        }
+
+    }
+    public void stopDraw(){
+        mIndexofData = 0;
+        mTobeShow = false;
+        mDataTmp = 0;
+        mEdemaDataFre = 0;
+        mEdemaDataImp = 0;
+        mEdemaDataPha = 0;
+        mEnableColcok = false;
+    }
 
 }

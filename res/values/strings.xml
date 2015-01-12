@@ -43,4 +43,5 @@
 	<!--GATT connection-->
 	<string name="connected">Connected</string>
 	<string name="disconnected">Disconnected</string>
+	<string name="connecting">Connecting...</string>
 </resources>

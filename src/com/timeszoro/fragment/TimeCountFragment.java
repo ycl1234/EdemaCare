@@ -30,6 +30,8 @@ public class TimeCountFragment extends Fragment {
     //Service Connection
     private boolean mConnected = false;
     private static boolean existed = false;
+    //
+    private static TimerService mTimerService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class TimeCountFragment extends Fragment {
         if(!existed){
             Intent intent = new Intent(getActivity(), TimerService.class);
             getActivity().bindService(intent,conn,Context.BIND_AUTO_CREATE);
-            existed = false;
+
         }
 
     }
@@ -149,8 +151,8 @@ public class TimeCountFragment extends Fragment {
             mConnected = true;
             //get the bind of the service,
             TimerService.TimerBinder binder = (TimerService.TimerBinder)service;
-            TimerService timerService = binder.getService();
-            timerService.startCount();
+            mTimerService = binder.getService();
+
         }
 
         @Override
@@ -159,4 +161,14 @@ public class TimeCountFragment extends Fragment {
 
         }
     };
+
+
+    //begin count time
+    public static boolean beginCountTime(){
+        if(mTimerService == null) {
+            return false;
+        }
+        mTimerService.startCount();
+        return true;
+    }
 }
