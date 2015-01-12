@@ -19,6 +19,7 @@ import com.github.mikephil.charting.utils.*;
 import com.github.mikephil.charting.utils.XLabels.XLabelPosition;
 import com.timeszoro.edemadata.EdemaData;
 import com.timeszoro.fragment.TimeCountFragment;
+import com.timeszoro.service.BluetoothLeService;
 
 import java.util.UUID;
 
@@ -41,8 +42,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     LineChart mLineChart ;
 
     //variate of the service
-    private BluetoothLeService mBleService;
-    private BluetoothGatt mBluetoothGatt;
+    private static BluetoothLeService mBleService;
+    private static BluetoothGatt mBluetoothGatt;
+
 
     //variate of the device to be connected
     private String mDeviceName;
@@ -154,7 +156,7 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBleService = ((BluetoothLeService.LocalBinder) service).getService();
+            mBleService = ((BluetoothLeService.LocalBinder)service).getService();
             mBluetoothGatt = mBleService.getmBluetoothGatt();
             if (!mBleService.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
@@ -196,161 +198,167 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
      * function #01 : broadcast receiver for the broadcast send from BluetoothGattCallback which show the result of Gatt connection and so on
      * function #02 : the action for the broadcast receiver
      */
-    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+    public final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             int status = intent.getIntExtra(BluetoothLeService.EXTRA_STATUS, BluetoothGatt.GATT_SUCCESS);
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
-                Log.d(CONNECT_STATUS,getString(R.string.connected));
+                Log.d(CONNECT_STATUS, getString(R.string.connected));
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
-                Log.d(CONNECT_STATUS,getString(R.string.disconnected));
+                Log.d(CONNECT_STATUS, getString(R.string.disconnected));
                 clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                if(status == BluetoothGatt.GATT_SUCCESS){
+                if (status == BluetoothGatt.GATT_SUCCESS) {
                     writetoCharacter();
                 }
 
             } else if (BluetoothLeService.ACTION_DATA_WRITE.equals(action)) {
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
                 enableDataTran();
-            }
-            else if(BluetoothLeService.ACTION_DATA_READ.equals(action)){
+            } else if (BluetoothLeService.ACTION_DATA_READ.equals(action)) {
 
-            }
-            else if(BluetoothLeService.ACTION_DATA_NOTIFY.equals(action)){
+            } else if (BluetoothLeService.ACTION_DATA_NOTIFY.equals(action)) {
                 // Notification
-                final byte  [] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
+                final byte[] value = intent.getByteArrayExtra(BluetoothLeService.EXTRA_DATA);
                 String uuidStr = intent.getStringExtra(BluetoothLeService.EXTRA_UUID);
-                Log.d(TAG,"onCharacteristChanged " + uuidStr);
+                Log.d(TAG, "onCharacteristChanged " + uuidStr);
 
-                String shortUUIDString = GattInfo.toShortUuidStr(UUID.fromString(uuidStr));
-                /***********************��ʾX�������******************************/
-                if(shortUUIDString.equals("ffa3")){
-
-                    impedanceIndex = impedanceIndex % 13;
-                    char impedancetmp = (char) (value[0] & 0xff);
-                    if(!bAcc_x)
-                    {
-                        //��ʱ���ո�λ
-                        mAcc_X = impedancetmp << 8;
-                        bAcc_x = true;
-                    }
-                    else{
-                        //�ϲ�
-                        mAcc_X = mAcc_X |(impedancetmp & 0xff);
-                        bAcc_x = false;
-                        //�õ���ʵ����ֵ
-                        mImp = mAcc_X;
-                        mPha = 255;
-                        mFre = frequences[impedanceIndex];
-                        bioService.insertBioData(mImp, mPha, mFre);
-                        //��ͼ����ʾ
-
-                        runOnUiThread(new  Runnable() {
-                            public void run() {
-                                double impedancetmp = (value[0] & 0xff);
-                                updateChart(((double)mAcc_X/10.0), MathHelper.NULL_VALUE, impedanceIndex);
-
-
-                            }
-                        });
-                        impedanceIndex ++;
-                    }
-
-
-                }
-                /***********************��ʾY�������******************************/
-                else if(shortUUIDString.equals("ffa4")){
-                    //phaceIndex = 4;
-                    phaceIndex = phaceIndex % 13;
-                    char phatmp = (char) (value[0] & 0xff) ;
-                    if(!bAcc_Y){
-                        mAcc_Y = phatmp << 8;
-                        bAcc_Y = true;
-                    }
-                    else{
-                        mAcc_Y = mAcc_Y | (phatmp & 0xff);
-                        bAcc_Y = false;
-                        mImp = 255;
-                        mPha = mAcc_Y;
-                        mFre = frequences[phaceIndex];
-                        bioService.insertBioData(mImp, mPha, mFre);
-
-
-                        runOnUiThread(new  Runnable() {
-                            public void run() {
-
-                                double phatmp = (value[0] & 0xff);
-                                updateChart(MathHelper.NULL_VALUE,(double)mAcc_Y/10.0,phaceIndex);
-
-                            }
-                        });
-                        phaceIndex ++;
-                    }
-
-                }
-                else if(shortUUIDString.equals("ffa5")){
-                    runOnUiThread(new  Runnable() {
-                        public void run() {
-                            //int currentFrequence = 0 ;
-                            if (value[0]%10 != 0) {
-                                currentFrequence = value[0] + 256;
-                            }
-                            else {
-                                currentFrequence = value[0];
-                            }
-                            //mTextView3.setText(String.valueOf(currentFrequence));
-                        }
-                    });
-                }
-                else{
-                    //����ȷ��UUID
-                    Log.d(TAG, "Error uuid info");
-                }
-
+//                String shortUUIDString = GattInfo.toShortUuidStr(UUID.fromString(uuidStr));
+//                /***********************��ʾX�������******************************/
+//                if(shortUUIDString.equals("ffa3")){
+//
+//                    impedanceIndex = impedanceIndex % 13;
+//                    char impedancetmp = (char) (value[0] & 0xff);
+//                    if(!bAcc_x)
+//                    {
+//                        //��ʱ���ո�λ
+//                        mAcc_X = impedancetmp << 8;
+//                        bAcc_x = true;
+//                    }
+//                    else{
+//                        //�ϲ�
+//                        mAcc_X = mAcc_X |(impedancetmp & 0xff);
+//                        bAcc_x = false;
+//                        //�õ���ʵ����ֵ
+//                        mImp = mAcc_X;
+//                        mPha = 255;
+//                        mFre = frequences[impedanceIndex];
+//                        bioService.insertBioData(mImp, mPha, mFre);
+//                        //��ͼ����ʾ
+//
+//                        runOnUiThread(new  Runnable() {
+//                            public void run() {
+//                                double impedancetmp = (value[0] & 0xff);
+//                                updateChart(((double)mAcc_X/10.0), MathHelper.NULL_VALUE, impedanceIndex);
+//
+//
+//                            }
+//                        });
+//                        impedanceIndex ++;
+//                    }
+//
+//
+//                }
+//                /***********************��ʾY�������******************************/
+//                else if(shortUUIDString.equals("ffa4")){
+//                    //phaceIndex = 4;
+//                    phaceIndex = phaceIndex % 13;
+//                    char phatmp = (char) (value[0] & 0xff) ;
+//                    if(!bAcc_Y){
+//                        mAcc_Y = phatmp << 8;
+//                        bAcc_Y = true;
+//                    }
+//                    else{
+//                        mAcc_Y = mAcc_Y | (phatmp & 0xff);
+//                        bAcc_Y = false;
+//                        mImp = 255;
+//                        mPha = mAcc_Y;
+//                        mFre = frequences[phaceIndex];
+//                        bioService.insertBioData(mImp, mPha, mFre);
+//
+//
+//                        runOnUiThread(new  Runnable() {
+//                            public void run() {
+//
+//                                double phatmp = (value[0] & 0xff);
+//                                updateChart(MathHelper.NULL_VALUE,(double)mAcc_Y/10.0,phaceIndex);
+//
+//                            }
+//                        });
+//                        phaceIndex ++;
+//                    }
+//
+//                }
+//                else if(shortUUIDString.equals("ffa5")){
+//                    runOnUiThread(new  Runnable() {
+//                        public void run() {
+//                            //int currentFrequence = 0 ;
+//                            if (value[0]%10 != 0) {
+//                                currentFrequence = value[0] + 256;
+//                            }
+//                            else {
+//                                currentFrequence = value[0];
+//                            }
+//                            //mTextView3.setText(String.valueOf(currentFrequence));
+//                        }
+//                    });
+//                }
+//                else{
+//                    //����ȷ��UUID
+//                    Log.d(TAG, "Error uuid info");
+//                }
+//
+//            }
             }
-            }
+
+        }
+
+        ;
 
     };
+        private IntentFilter makeGattUpdateIntentFilter() {
+            final IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
+            intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
+            intentFilter.addAction(BluetoothLeService.ACTION_DATA_NOTIFY);
+            intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
+            intentFilter.addAction(BluetoothLeService.ACTION_DATA_WRITE);
+            intentFilter.addAction(BluetoothLeService.ACTION_DATA_READ);
+            return intentFilter;
+        }
 
-
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_NOTIFY);
-        intentFilter.addAction(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_WRITE);
-        intentFilter.addAction(BluetoothLeService.ACTION_DATA_READ);
-        return intentFilter;
-    }
-
-    private void writetoCharacter(){
-
-            BluetoothGattService service = mBluetoothGatt.getService(UUID.fromString("0000ffa1-0000-1000-8000-00805f9b34fb");
-            BluetoothGattCharacteristic bluetoothGattCharacteristic = service.getCharacteristic(UUID.fromString("0000ffa1-0000-1000-8000-00805f9b34fb"));
+        private void writetoCharacter() {
+            if(mBluetoothGatt == null){
+                mBluetoothGatt = mBleService.getmBluetoothGatt();
+            }
+            BluetoothGattService service = mBluetoothGatt.getService(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT));
+            BluetoothGattCharacteristic bluetoothGattCharacteristic = service.getCharacteristic(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_NOTUFY_MEASUREMENT));
             if (mBleService.writeCharacteristic(bluetoothGattCharacteristic, true)) {
                 Log.i(TAG, "write success");
             }
             mBleService.waitIdle(GATT_TIMEOUT);
-    }
+        }
 
-    private void enableDataTran(){
-            enableNotification(GattInfo.shortUuidToLong("ffa0"), GattInfo.shortUuidToLong("ffa3"), true);
-            enableNotification(GattInfo.shortUuidToLong("ffa0"), GattInfo.shortUuidToLong("ffa4"), true);
-            enableNotification(GattInfo.shortUuidToLong("ffa0"), GattInfo.shortUuidToLong("ffa5"), true);
+        private void enableDataTran() {
+            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_IMPEDANCE_MEASUREMENT), true);
+            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_PHA_MEASUREMENT), true);
+            enableNotification(EdemaAttributes.getUUID(EdemaAttributes.EDEMA_MEASUREMENT), EdemaAttributes.getUUID(EdemaAttributes.EDEMA_FRE_MEASUREMENT), true);
 
 
-    }
-    private void enableNotification(UUID serviceUuid, UUID charaUuid,boolean enable){
-        BluetoothGattService serv = mBluetoothGatt.getService(serviceUuid);
-        BluetoothGattCharacteristic characteristic = serv.getCharacteristic(charaUuid);
-        mBleService.setCharacteristicNotification(characteristic, true);
-        mBleService.waitIdle(GATT_TIMEOUT);
-    }
+        }
+
+        private void enableNotification(UUID serviceUuid, UUID charaUuid, boolean enable) {
+            BluetoothGattService serv = mBluetoothGatt.getService(serviceUuid);
+            BluetoothGattCharacteristic characteristic = serv.getCharacteristic(charaUuid);
+            mBleService.setCharacteristicNotification(characteristic, true);
+            mBleService.waitIdle(GATT_TIMEOUT);
+
+
+
+        }
 
 
 }

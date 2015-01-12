@@ -2,7 +2,7 @@
  * Created by Timeszoro on 2015/01/07.
  */
 
-package com.timeszoro.edemacare;
+package com.timeszoro.service;
 
 import android.app.Service;
 import android.bluetooth.*;
@@ -101,9 +101,14 @@ public class BluetoothLeService extends Service {
             switch (newState) {
                 case BluetoothProfile.STATE_CONNECTED:
                     broadcastUpdate(ACTION_GATT_CONNECTED, address, status);
+                    Log.i(TAG, "Connected to GATT server.");
+                    // Attempts to discover services after successful connection.
+                    Log.i(TAG, "Attempting to start service discovery:" +
+                            mBluetoothGatt.discoverServices());
                     break;
                 case BluetoothProfile.STATE_DISCONNECTED:
                     broadcastUpdate(ACTION_GATT_DISCONNECTED, address, status);
+                    Log.i(TAG, "Disconnected from GATT server.");
 
                 default:
                     Log.e(TAG, "new state not processed: " + newState);
@@ -187,7 +192,7 @@ public class BluetoothLeService extends Service {
      *  function #03 : override the
      */
     public class LocalBinder extends Binder {
-        BluetoothLeService getService() {
+        public BluetoothLeService getService() {
             return BluetoothLeService.this;
         }
     }
@@ -241,22 +246,46 @@ public class BluetoothLeService extends Service {
      */
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                               boolean enabled) {
+
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
-        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
-
-        // This is specific to Heart Rate Measurement.
-        final  UUID UUID_HEART_RATE_MEASUREMENT =
-                UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
-
-        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-            mBluetoothGatt.writeDescriptor(descriptor);
+        if (!mBluetoothGatt.setCharacteristicNotification(characteristic, enabled)) {
+            Log.w(TAG, "setCharacteristicNotification failed");
+            return ;
         }
+
+        BluetoothGattDescriptor clientConfig = characteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
+        if (clientConfig == null)
+            return ;
+
+        if (enabled) {
+            Log.i(TAG, "enable notification");
+            clientConfig.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        } else {
+            Log.i(TAG, "disable notification");
+            clientConfig.setValue(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+        }
+
+
+        mBluetoothGatt.writeDescriptor(clientConfig);
+//        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+//            Log.w(TAG, "BluetoothAdapter not initialized");
+//            return;
+//        }
+//        mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+//
+//        // This is specific to Heart Rate Measurement.
+//        final  UUID UUID_HEART_RATE_MEASUREMENT =
+//                UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
+//
+//        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+//            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+//                    UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+//            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+//            mBluetoothGatt.writeDescriptor(descriptor);
+//        }
 
     }
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
