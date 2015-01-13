@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class EdemaData {
     private static final int NUM_OF_DATA = 20;//set the number of the edema data
     private LineData mLineData;//
-
+    private static EdemaData mEdemaData;
 
     private int mDataNum = 0;
     ArrayList<String> mXVals ;
@@ -28,7 +28,8 @@ public class EdemaData {
 
     //only one object is created
     public static EdemaData getEdemaDataHandle(){
-        return new EdemaData();
+        mEdemaData =  new EdemaData();
+        return mEdemaData;
     }
 
     //the number of data

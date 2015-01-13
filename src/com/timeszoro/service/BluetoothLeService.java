@@ -11,6 +11,9 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import com.timeszoro.edemacare.EdemaActivity;
+import com.timeszoro.edemadata.EdemaData;
+import com.timeszoro.edemadata.EdemaInfo;
 
 import java.util.UUID;
 
@@ -49,8 +52,13 @@ public class BluetoothLeService extends Service {
     //Blinder
     private final IBinder mBinder = new LocalBinder();
     private static String mBluetoothDeviceAdress ;
+    //Data Process
 
-
+    private int mEdemaDataFre;
+    private int mEdemaDataImp;
+    private int mEdemaDataPha;
+    private int mIndexofData = 0;
+    private int mDataTmp = 0;//tmp for the data received
     /**functions for the GATT connection
      * function #01 : connect to the GATT with the ble adress
      * function #02 : the call back funciton for the connect() fucntion
@@ -83,6 +91,7 @@ public class BluetoothLeService extends Service {
         Log.d(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = adress;
         mConnectionState = STATE_CONNECTING;
+
         return true;
     }
     // the call back function
@@ -151,7 +160,11 @@ public class BluetoothLeService extends Service {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            broadcastUpdate(ACTION_DATA_NOTIFY, characteristic, BluetoothGatt.GATT_SUCCESS);
+
+            byte[] value = characteristic.getValue();
+            splitEdemaData((value[0] & 0xff),characteristic);
+
+
         }
 
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {};
@@ -335,4 +348,55 @@ public class BluetoothLeService extends Service {
     public BluetoothGatt getmBluetoothGatt() {
         return mBluetoothGatt;
     }
+
+
+    public  void  splitEdemaData(int value,BluetoothGattCharacteristic characteristic) {
+
+        switch (mIndexofData) {
+            case 0:
+                if (value == EdemaActivity.mCurFre) {
+                    EdemaActivity.mTobeShow = true;//according to the selected frequence ,whether show or not
+                }
+                mEdemaDataFre = value;
+                mIndexofData++;
+                break;
+            case 1:
+
+                mDataTmp = value;
+                mIndexofData++;
+                break;
+            case 2:
+                mEdemaDataImp = mDataTmp * 256 + (value < 0 ? (256 + value) : value);// input the signed value
+                Log.d(TAG, "edema Imp " + String.valueOf(mEdemaDataImp));
+                if (EdemaActivity.mTobeShow) {
+                    //if show in the chart ,add the data to the EdemaData
+                    EdemaActivity.mEdemaData.addImpVal(mEdemaDataImp / 10);
+                }
+                mIndexofData++;
+                break;
+            case 3:
+
+                mEdemaDataPha = value;
+                if (EdemaActivity.mTobeShow) {
+                    EdemaActivity.mEdemaData.addPhaVal((value < 0 ? (256 + value) : value) / 10);
+//                    EdemaActivity.mLineChart.invalidate();
+
+                    EdemaActivity.mTobeShow = false;
+                }
+                broadcastUpdate(ACTION_DATA_NOTIFY, characteristic, BluetoothGatt.GATT_SUCCESS);
+
+                //insert the data in the SQL
+                EdemaInfo edemaInfo = new EdemaInfo(mEdemaDataFre,mEdemaDataImp,mEdemaDataPha);
+                EdemaActivity.mDBManager.addEdemaData(edemaInfo);
+                //back to next fre
+                mIndexofData = 0;
+                break;
+
+        }
+
+
+    }
+
+
+
 }
