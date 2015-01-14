@@ -65,6 +65,12 @@ public class TimeCountFragment extends Fragment {
         getActivity().unregisterReceiver(mReceiver);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopService();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

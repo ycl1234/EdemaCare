@@ -61,6 +61,14 @@ public class TimerService extends Service implements Runnable{
         return mBinder;
     }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        stopCount();
+        return super.onUnbind(intent);
+
+
+    }
+
     /**
      * get the binder of timerservice
      */
@@ -140,5 +148,9 @@ public class TimerService extends Service implements Runnable{
      */
     public void stopCount(){
         mCountRunning = false;
+        mHours = 0;
+        mMins = 0 ;
+        mSeconds = 0;
+       stopSelf();
     }
 }

@@ -174,10 +174,19 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mServiceConnection);
+
         mDBManager.close();
+        mTimerFragment = null;
+
         mBleService = null;
     }
 
