@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 import com.example.edemacare.R;
 import com.github.mikephil.charting.charts.*;
@@ -24,6 +25,7 @@ import com.timeszoro.fragment.TimeCountFragment;
 import com.timeszoro.fragment.TimeCountPreFragment;
 import com.timeszoro.service.BluetoothLeService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -32,7 +34,7 @@ import java.util.UUID;
  */
 public class EdemaActivity extends Activity implements OnChartValueSelectedListener {
     private static final int GATT_TIMEOUT = 500; // milliseconds
-    private static final int CUR_FRE = 5;
+    private static final int CUR_FRE = 3;
     private final String TAG = "Edema data";
     private final String CONNECT_STATUS = "Connect status";
     public  static int mCurFre = CUR_FRE;
@@ -97,7 +99,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         //init the wheel of frequence selection
 
         final AbstractWheel frequenceSel = (AbstractWheel) findViewById(R.id.ble_frequence_selection);
-        NumericWheelAdapter freAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
+        ArrayWheelAdapter<String> freAdapter =
+                new ArrayWheelAdapter<String>(this, new String[] { "02", "03","04", "05", "06","07", "08", "09","10","15", "20", "25","30"});
+//        NumericWheelAdapter freAdapter = new NumericWheelAdapter(this, 0, 59, "%02d");
         freAdapter.setItemResource(R.layout.wheel_text_centered_item);
         freAdapter.setItemTextResource(R.id.text);
         frequenceSel.setViewAdapter(freAdapter);
@@ -113,7 +117,7 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
                 Log.d(TAG, "wheel finished");
                 //set current item number
                 mCurFre = wheel.getCurrentItem();
-
+                notifyFreChanged();
 
             }
         });
@@ -126,7 +130,8 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         mLineChart.setTouchEnabled(true);// enable touch gestures
         mLineChart.setDragEnabled(true);// enable scaling and dragging
         mLineChart.setScaleEnabled(true);
-        mLineChart.setPinchZoom(false);// if disabled, scaling can be done on x- and y-axis separately
+        mLineChart.setPinchZoom(true);// if disabled, scaling can be done on x- and y-axis separately
+        mLineChart.setYRange(0,200,true);
         XLabels xl = mLineChart.getXLabels();
         xl.setPosition(XLabelPosition.BOTTOM);
         xl.setCenterXLabelText(true);
@@ -134,10 +139,10 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         int num = 20;
         mEdemaData = EdemaData.getEdemaDataHandle();
         mEdemaData.setmDataNum(num);
-        for (int i = 0; i < 3 * num; i++) {
+        for (int i = 0; i <  num; i++) {
             mEdemaData.addXVals(String.valueOf(i));
         }
-        for (int i = 0; i < 3 * num; i++) {
+        for (int i = 0; i < 2 * num; i++) {
             mEdemaData.addImpVal(i);
             mEdemaData.addPhaVal(i * 2);
         }
@@ -172,6 +177,7 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
     protected void onDestroy() {
         super.onDestroy();
         unbindService(mServiceConnection);
+        mDBManager.close();
         mBleService = null;
     }
 
@@ -206,6 +212,9 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
      * function #02 : listener when the data is selected
      */
     private void clearUI() {
+        mEdemaData.cleanData();
+        mLineChart.invalidate();
+        // add the new frequency data
 
     }
 
@@ -386,7 +395,14 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         mEnableColcok = false;
     }
 
+    public void notifyFreChanged(){
+        clearUI();
+        List<EdemaInfo> list =  mDBManager.queryLastData(mCurFre);
+        mEdemaData.addEdemaInfoList(list);
+        mLineChart.setDrawGridBackground(false);
+        mLineChart.invalidate();
 
+    }
 
 
 }

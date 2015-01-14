@@ -7,6 +7,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2015/1/8.
@@ -22,7 +23,7 @@ public class EdemaData {
     ArrayList<String> mXVals ;
     ArrayList<Entry> mYImpeVals ;//Impedance values
     ArrayList<Entry> mYPhaVals;//Phase values
-
+    private static  final  float SCALE = 10.0f;
 
 
 
@@ -62,10 +63,10 @@ public class EdemaData {
             for(int i = 0; i < mYImpeVals.size() - 1;i++){
                 mYImpeVals.set(i,new Entry(mYImpeVals.get(i + 1).getVal(),i));
             }
-            mYImpeVals.set(mDataNum - 1, new Entry((float) impVal, mDataNum - 1));
+            mYImpeVals.set(mDataNum - 1, new Entry((float) impVal/SCALE, mDataNum - 1));
         }
         else{
-            mYImpeVals.add(new Entry((float)impVal,mYImpeVals.size()));
+            mYImpeVals.add(new Entry((float)impVal/SCALE,mYImpeVals.size()));
         }
 
     }
@@ -78,10 +79,10 @@ public class EdemaData {
             for(int i = 0; i < mYPhaVals.size() - 1;i++){
                 mYPhaVals.set(i,new Entry(mYPhaVals.get(i + 1).getVal(),i));
             }
-            mYPhaVals.set(mDataNum - 1, new Entry((float) impVal, mDataNum - 1 ));
+            mYPhaVals.set(mDataNum - 1, new Entry((float) impVal/SCALE, mDataNum - 1 ));
         }
         else{
-            mYPhaVals.add(new Entry((float)impVal,mYPhaVals.size()));
+            mYPhaVals.add(new Entry((float)impVal/SCALE,mYPhaVals.size()));
         }
 
     }
@@ -107,4 +108,29 @@ public class EdemaData {
 
     }
 
+    public void cleanData(){
+        mYImpeVals.clear();
+        mXVals.clear();
+        mYPhaVals.clear();
+    }
+
+    //add the list from last
+    public void addEdemaInfoList(List<EdemaInfo> list){
+        int index = list.size() - 1;
+        while(index >= 0){
+            EdemaInfo edemaInfo = list.get(index);
+            this.addXVals(String.valueOf((int)(edemaInfo.getId()/13)));
+            this.addImpVal(edemaInfo.getImp());
+            this.addPhaVal(edemaInfo.getPha());
+            index --;
+        }
+    }
+
+    //get current X val
+    public void addEdemaInfo(EdemaInfo edemaInfo){
+        this.addXVals(String.valueOf(Integer.parseInt(mXVals.get(mXVals.size() - 1)) + 1) );
+        this.addImpVal(edemaInfo.getImp());
+        this.addPhaVal(edemaInfo.getPha());
+
+    }
 }

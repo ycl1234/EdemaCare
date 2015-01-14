@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class EdemaDBManager {
     private EdemaDBHelper mDBHelper;
-
+    private SQLiteDatabase db;
 
     public EdemaDBManager(Context context){
         mDBHelper = new EdemaDBHelper(context);
@@ -22,18 +22,18 @@ public class EdemaDBManager {
 
     //Add new edema data
     public void addEdemaData(EdemaInfo data){
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db = mDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(EdemaDBHelper.KEY_FRE,data.getFre());
         values.put(EdemaDBHelper.KEY_IMP,data.getImp());
         values.put(EdemaDBHelper.KEY_PHA,data.getPha());
 
         db.insert(EdemaDBHelper.TABLE_EDEMA, null, values);
-        db.close();
+//        db.close();
     }
 
     public void addEdemaList(List<EdemaInfo> list){
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db = mDBHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             for(EdemaInfo e: list){
@@ -45,12 +45,12 @@ public class EdemaDBManager {
             db.endTransaction();
         }
 
-        db.close();
+//        db.close();
     }
 
     // Getting single contact
     public EdemaInfo getEdemaInfo(int id) {
-        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        db = mDBHelper.getReadableDatabase();
 
         Cursor cursor = db.query(EdemaDBHelper.TABLE_EDEMA, new String[] { EdemaDBHelper.KEY_FRE,
                         EdemaDBHelper.KEY_IMP, EdemaDBHelper.KEY_PHA }, EdemaDBHelper.KEY_ID + "=?",
@@ -68,14 +68,14 @@ public class EdemaDBManager {
     public List<EdemaInfo> getAllContacts(){
         List<EdemaInfo> edemaInfoList = new ArrayList<EdemaInfo>();
         String selectQuery = "SELECT * FROM "+ EdemaDBHelper.TABLE_EDEMA;
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db = mDBHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,null);
         if (cursor.moveToFirst()) {
             do {
                 EdemaInfo edemaInfo = new EdemaInfo();
                 edemaInfo.setFre(Integer.parseInt(cursor.getString(0)));
-                edemaInfo.setFre(Integer.parseInt(cursor.getString(1)));
-                edemaInfo.setFre(Integer.parseInt(cursor.getString(2)));
+                edemaInfo.setImp(Integer.parseInt(cursor.getString(1)));
+                edemaInfo.setPha(Integer.parseInt(cursor.getString(2)));
                 // Adding contact to list
                 edemaInfoList.add(edemaInfo);
             } while (cursor.moveToNext());
@@ -85,7 +85,7 @@ public class EdemaDBManager {
     // Getting EdemaInfo Count
     public int getContactsCount() {
         String countQuery = "SELECT  * FROM " + EdemaDBHelper.TABLE_EDEMA;
-        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        db = mDBHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
 
@@ -96,15 +96,15 @@ public class EdemaDBManager {
     //Delete single EdemaInfo
 
     public void deleteContact(EdemaInfo edemaInfo) {
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db = mDBHelper.getWritableDatabase();
         db.delete(EdemaDBHelper.TABLE_EDEMA, EdemaDBHelper.KEY_ID + " = ?",
                 new String[] { String.valueOf(edemaInfo.getId()) });
-        db.close();
+//        db.close();
     }
 
     // Updating single edemaInfo
     public int updateEdemaInfo(EdemaInfo data) {
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db = mDBHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(EdemaDBHelper.KEY_FRE,data.getFre());
@@ -116,6 +116,42 @@ public class EdemaDBManager {
                 new String[] { String.valueOf(data.getId()) });
     }
 
+    //query the last 20 data
+    public List<EdemaInfo> queryLastData(int fre){
+        List<EdemaInfo> edemaInfoList = new ArrayList<EdemaInfo>();
+        String selectQuery = "SELECT * FROM "+ EdemaDBHelper.TABLE_EDEMA +" WHERE "+EdemaDBHelper.KEY_FRE+"='"+fre+"'";
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        int index = 0;
+        if (cursor.moveToLast()) {
+            do {
+                EdemaInfo edemaInfo = new EdemaInfo();
+                edemaInfo.setId(Integer.parseInt(cursor.getString(0)));
+                edemaInfo.setFre(Integer.parseInt(cursor.getString(1)));
+                edemaInfo.setImp(Integer.parseInt(cursor.getString(2)));
+                edemaInfo.setPha(Integer.parseInt(cursor.getString(3)));
+                // Adding contact to list
+                edemaInfoList.add(edemaInfo);
+                index++;
+            } while (cursor.moveToPrevious() && index < 20);
+        }
+        cursor.close();
+        return edemaInfoList;
+    }
 
+    public int getFreDataNum(int fre){
+
+        List<EdemaInfo> edemaInfoList = new ArrayList<EdemaInfo>();
+        String selectQuery = "SELECT * FROM "+ EdemaDBHelper.TABLE_EDEMA +" WHERE "+EdemaDBHelper.KEY_FRE+"='"+fre+"'";
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+
+        cursor.close();
+        return cursor.getCount();
+
+    }
+    public void close(){
+        db.close();
+    }
 
 }

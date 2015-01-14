@@ -370,7 +370,7 @@ public class BluetoothLeService extends Service {
                 Log.d(TAG, "edema Imp " + String.valueOf(mEdemaDataImp));
                 if (EdemaActivity.mTobeShow) {
                     //if show in the chart ,add the data to the EdemaData
-                    EdemaActivity.mEdemaData.addImpVal(mEdemaDataImp / 10);
+                    //EdemaActivity.mEdemaData.addImpVal(mEdemaDataImp);
                 }
                 mIndexofData++;
                 break;
@@ -378,7 +378,13 @@ public class BluetoothLeService extends Service {
 
                 mEdemaDataPha = value;
                 if (EdemaActivity.mTobeShow) {
-                    EdemaActivity.mEdemaData.addPhaVal((value < 0 ? (256 + value) : value) / 10);
+//                    String  size = String.valueOf(EdemaActivity.mDBManager.getFreDataNum(EdemaActivity.mCurFre));
+//                    EdemaActivity.mEdemaData.cleanData();
+//                    EdemaActivity.mEdemaData.addXVals(size);
+                    mEdemaDataPha = (value < 0 ? (256 + value) : value);
+                    EdemaInfo edemaInfo = new EdemaInfo(EdemaActivity.mCurFre,mEdemaDataImp,mEdemaDataPha);
+                    EdemaActivity.mEdemaData.addEdemaInfo(edemaInfo);
+//                    EdemaActivity.mEdemaData.addPhaVal(mEdemaDataPha);
 //                    EdemaActivity.mLineChart.invalidate();
 
                     EdemaActivity.mTobeShow = false;

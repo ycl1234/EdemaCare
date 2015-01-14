@@ -46,4 +46,8 @@ public class EdemaInfo {
     public int getId() {
         return mId;
     }
+
+    public void setId(int mId) {
+        this.mId = mId;
+    }
 }
