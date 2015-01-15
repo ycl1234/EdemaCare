@@ -127,6 +127,8 @@ public class BledeviceActivity extends FragmentActivity {
     	switch (item.getItemId()) {
 		case R.id.action_upload:
 			Log.d(TAG, "upload button is clicked");
+			Intent intent = new Intent(this,FileUploadActivity.class);
+			startActivity(intent);
 			break;
 //		case R.id.action_setting:
 //			Log.d(TAG, "setting button is clicked");

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+
+              android:background="@color/ble_blackgroud" >
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="@dimen/ble_size_of_ble_item"
+                  android:orientation="horizontal"
+                  android:paddingLeft="40dp"
+                  android:paddingTop="20dp"
+                  android:background="@color/ble_blackgroud">
+
+        <ImageView android:layout_width="10dp"
+                   android:layout_height="18dp"
+                   android:background="@drawable/ble_title"
+                   android:layout_marginRight="24dp"/>
+
+
+        <TextView
+                android:id="@+id/ble_device_list_name"
+                android:layout_marginTop="-6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/ble_file_list_name"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                />
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="7dp"
+               android:background="@drawable/ble_list_line_up"
+            />
+    <FrameLayout
+            android:id="@+id/fragment_fileList"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ble_size_of_file_list"
+            android:background="@color/ble_blackgroud"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp">
+
+    </FrameLayout>
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="7dp"
+               android:background="@drawable/ble_list_line_up"
+               android:layout_marginTop="-5dp"
+            />
+    <LinearLayout android:layout_width="wrap_content" 
+                  android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"
+                android:id="@+id/selecte_all"
+                android:text="Select All"
+                android:layout_marginLeft="50dp"
+                android:background="@color/ring_color"/>
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload File"
+                android:id="@+id/upload"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_gravity="center"
+                android:background="@color/ring_color"/>
+            
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
+
+
+

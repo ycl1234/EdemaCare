@@ -17,6 +17,7 @@
 	<string name="action_stop">Stop show the data</string>
 	<!-- the first view paraments -->
 	<string name="ble_device_list_name">Equipment List</string>
+	<string name="ble_file_list_name">File List</string>
 
 
 	<!-- the device scan -->
