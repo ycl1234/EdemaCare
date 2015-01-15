@@ -154,9 +154,12 @@ public class EdemaDBManager {
 
     }
     public void close(){
-        db.close();
-        db = null;
-        mDBHelper = null;
+        if(db != null){
+            db.close();
+            db = null;
+            mDBHelper = null;
+        }
+
     }
 
 }
