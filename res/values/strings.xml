@@ -14,6 +14,7 @@
 	
 	<!-- action bar -->
 	<string name="action_upload">Upload the file</string>
+	<string name="action_stop">Stop show the data</string>
 	<!-- the first view paraments -->
 	<string name="ble_device_list_name">Equipment List</string>
 

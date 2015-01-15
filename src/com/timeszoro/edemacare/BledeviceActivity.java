@@ -128,8 +128,8 @@ public class BledeviceActivity extends FragmentActivity {
 		case R.id.action_upload:
 			Log.d(TAG, "upload button is clicked");
 			break;
-		case R.id.action_setting:
-			Log.d(TAG, "setting button is clicked");
+//		case R.id.action_setting:
+//			Log.d(TAG, "setting button is clicked");
 		default:
 			break;
 		}

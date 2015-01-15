@@ -9,15 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.*;
+import android.util.Log;
 import com.example.edemacare.R;
 
 
 
 
-public class TimerService extends Service implements Runnable{
+public class TimerService extends Service{
     //actions between service and activity
     private final String ACTION_SERVICE_2_ACTIVITY = "com.timeszoro.timer2activity";
-    private final String ACTION_ACTIVITY_2_SERVICE = "com.timeszoro.activity2timer";
 
     //time count
     private int mHours;
@@ -31,31 +31,10 @@ public class TimerService extends Service implements Runnable{
     //send current time
     private Intent mIntentSendTime;
     //whether the count is runing
-    private boolean mCountRunning = false;
-    //time count service
-    private TimeSreviceReceiver mServiceReceiver;
-    /**
-     * Send the time add message every one second , which will be processed in handler
-     */
-    @Override
-    public void run() {
-        mCountRunning = true;
-        while(true && mCountRunning){
-            Message message = Message.obtain();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(TIME_ADD,true);
-            message.setData(bundle);
-            mHandler.sendMessage(message);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-    }
-
+    private boolean mFlag = false;
+    private static TimeThread mThread;
+    //static
+    private static int mAllThreadNum = 0;
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -64,9 +43,8 @@ public class TimerService extends Service implements Runnable{
     @Override
     public boolean onUnbind(Intent intent) {
         stopCount();
+        stopSelf();
         return super.onUnbind(intent);
-
-
     }
 
     /**
@@ -83,11 +61,6 @@ public class TimerService extends Service implements Runnable{
         super.onCreate();
         //init
         mIntentSendTime = new Intent();
-        //register the broadcast receiver
-        mServiceReceiver = new TimeSreviceReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ACTION_ACTIVITY_2_SERVICE);
-        registerReceiver(mServiceReceiver,filter);
         //handler the timer count message
         mHandler = new Handler(){
             @Override
@@ -117,40 +90,79 @@ public class TimerService extends Service implements Runnable{
                 mIntentSendTime.putExtra(getString(R.string.ble_sendtime_seconds),mSeconds);
                 mIntentSendTime.setAction(ACTION_SERVICE_2_ACTIVITY);
                 sendBroadcast(mIntentSendTime);
+
+
             }
         };
     }
+
+
+    public void init(){
+        mHours = 0;
+        mMins = 0;
+        mSeconds = 0;
+    }
     /**
-     * process the broadcast send from
+     * begin count the time
      */
-    class TimeSreviceReceiver extends BroadcastReceiver{
+    public void startCount() {
+//        mAllThreadNum++;
+        if(mThread != null){
+            setFlag(false);
+            init();
+            setFlag(true);
+        }
+        if(mThread == null){
+            init();
+            setFlag(true);
+
+            mThread = new TimeThread();
+            mThread.start();
+        }
+    }
+
+    public void setFlag(boolean mFlag) {
+        this.mFlag = mFlag;
+    }
+
+    public void stopCount(){
+        setFlag(false);
+        mThread.deleteThread();
+        if(mThread != null){
+            mThread.interrupt();
+            mThread = null;
+        }
+
+    }
+    public class TimeThread extends Thread{
+        public int mThreadNum = 0;
+        public TimeThread(){
+//            mThreadNum++;
+            Log.d("Current mAllThreadNum ", " "+mAllThreadNum );
+            Log.d("Current mThreadNum ", " "+mThreadNum );
+        }
+        public void deleteThread(){
+            mThreadNum--;
+        }
         @Override
-        public void onReceive(Context context, Intent intent) {
-            Bundle bundle = intent.getExtras();
-            boolean startCount = bundle.getBoolean(getString(R.string.ble_time_start),true);
-            if(!mCountRunning && startCount){
-                new Thread(TimerService.this).start();
-            }
-            else if(mCountRunning && !startCount){
-                mCountRunning = false;
+        public void run() {
+            super.run();
+            while (mFlag && mThreadNum == mAllThreadNum) {
+                Message message = Message.obtain();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(TIME_ADD, true);
+                message.setData(bundle);
+                if(mThreadNum == mAllThreadNum){
+                    mHandler.sendMessage(message);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         }
     }
 
-    /**
-     * begin count the time
-     */
-    public void startCount(){
-        new Thread(TimerService.this).start();
-    }
-    /**
-     * stop count the timer
-     */
-    public void stopCount(){
-        mCountRunning = false;
-        mHours = 0;
-        mMins = 0 ;
-        mSeconds = 0;
-       stopSelf();
-    }
 }
