@@ -219,6 +219,7 @@ public class BluetoothLeService extends Service {
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
         close();
+        stopSelf();
         return super.onUnbind(intent);
     }
 

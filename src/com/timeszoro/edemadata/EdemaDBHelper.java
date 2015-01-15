@@ -13,11 +13,11 @@ public class EdemaDBHelper extends SQLiteOpenHelper {
 
 
     //Get current time;
-    private static long curTime = System.currentTimeMillis();
+    private  long curTime = System.currentTimeMillis();
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
-    private static final String DATABASE_NAME = "edema_db_"+curTime;
+    private String DATABASE_NAME = "edema_db_"+curTime;
     // Edema table name
     public static final String TABLE_EDEMA = "edema";
     // Edema Table Columns names
@@ -27,9 +27,11 @@ public class EdemaDBHelper extends SQLiteOpenHelper {
     public static final String KEY_PHA = "phase";
     private Context mContext;
 
-    public EdemaDBHelper(Context context) {
-        super(context,DATABASE_NAME,null,DATABASE_VERSION);
-        this.mContext = mContext;
+
+    public EdemaDBHelper(Context context,String dbName) {
+
+        super(context,dbName,null,DATABASE_VERSION);
+
     }
 
     @Override

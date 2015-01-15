@@ -90,8 +90,8 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
         //init sql
-        mDBManager = new EdemaDBManager(this);
-
+//        mDBManager = new EdemaDBManager(this);
+        initDB();
         //init fragment
         TimeCountPreFragment preFragment = new TimeCountPreFragment();
         mTimerFragment = new TimeCountFragment();
@@ -206,12 +206,18 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         unbindService(mServiceConnection);
 
         mDBManager.close();
+        mDBManager = null;
         mTimerFragment = null;
 
         mBleService = null;
     }
 
 
+    public void initDB(){
+        if(mDBManager == null){
+            mDBManager = new EdemaDBManager(this);
+        }
+    }
     /**
      * Functions fo the BluetoothService connection
      * function #01 : the call back function of the bind service

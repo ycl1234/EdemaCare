@@ -17,11 +17,14 @@ public class EdemaDBManager {
     private SQLiteDatabase db;
 
     public EdemaDBManager(Context context){
-        mDBHelper = new EdemaDBHelper(context);
+         long curTime = System.currentTimeMillis();
+        String dbName = "edema_db_"+curTime;
+        mDBHelper = new EdemaDBHelper(context,dbName);
     }
 
     //Add new edema data
     public void addEdemaData(EdemaInfo data){
+
         db = mDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(EdemaDBHelper.KEY_FRE,data.getFre());
@@ -152,6 +155,8 @@ public class EdemaDBManager {
     }
     public void close(){
         db.close();
+        db = null;
+        mDBHelper = null;
     }
 
 }
