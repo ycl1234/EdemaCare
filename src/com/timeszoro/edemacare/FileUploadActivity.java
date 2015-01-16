@@ -9,13 +9,13 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import android.widget.CheckBox;
 import com.example.edemacare.R;
 import com.timeszoro.fragment.FileListFragment;
 import com.timeszoro.mode.FilesLab;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -26,8 +26,9 @@ public class FileUploadActivity extends FragmentActivity implements View.OnClick
     private FileListFragment mFileListFragment;
     private FilesLab mFileLab;
     private ArrayList<File> mFileList ;
-    private Button mSelectAll;
     private Button mUpload;
+    private CheckBox mSelectAllChk;
+    private boolean misSelected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,31 +53,34 @@ public class FileUploadActivity extends FragmentActivity implements View.OnClick
 
 
         //init the buttons
-        mSelectAll = (Button) findViewById(R.id.selecte_all);
         mUpload = (Button)findViewById(R.id.upload);
-        mSelectAll.setOnClickListener(this);
+        mSelectAllChk = (CheckBox)findViewById(R.id.select_all_checkout);
         mUpload.setOnClickListener(this);
+        mSelectAllChk.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.selecte_all:
-                mFileListFragment.selectAll();
+            case R.id.select_all_checkout:
+                if(mSelectAllChk.isChecked()){
+                    mFileListFragment.selectAll();
+                }
+                else{
+                    mFileListFragment.cancelAll();
+                }
+
                 break;
+
             case R.id.upload:
-                //get the list of the files
-
-
-
-
                 ArrayList<File> files = mFileListFragment.getSendFiles();
 
                 Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Data of the Edema Measurement");
                 intent.putExtra(Intent.EXTRA_TEXT, "Mail with multiple attachments");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"jygjhappy@gmail.com"});
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"wgjing307@yeah.net"});
 
                 ArrayList<Uri> uris = new ArrayList<Uri>();
                 for(File f: files){

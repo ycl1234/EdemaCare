@@ -8,6 +8,7 @@ import android.content.*;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import antistatic.spinnerwheel.AbstractWheel;
@@ -439,6 +440,14 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
         mLineChart.invalidate();
 
     }
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if(keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

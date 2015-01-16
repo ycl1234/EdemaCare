@@ -51,6 +51,13 @@ public class FileListFragment extends ListFragment{
         mFileAdapter.notifyDataSetInvalidated();
     }
 
+    public void  cancelAll(){
+        for (int i = 0;i < mFileAdapter.getCount();i++){
+            mFileAdapter.isSelected.set(i,false);
+        }
+        mFileAdapter.notifyDataSetInvalidated();
+    }
+
     public ArrayList<File> getSendFiles(){
         ArrayList<File> list = new ArrayList<File>();
         for(int i = 0 ;i < mFileAdapter.getCount();i++){
@@ -122,7 +129,7 @@ public class FileListFragment extends ListFragment{
                 holder = (ViewHolder)view.getTag();
             }
 
-            holder.imageView.setBackgroundResource(R.drawable.img_bledevice);
+            holder.imageView.setBackgroundResource(R.drawable.database);
             holder.textView.setText(fileList.get(position).getName());
             holder.checkBox.setChecked(isSelected.get(position));
             return view;

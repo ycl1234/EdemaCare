@@ -15,7 +15,7 @@
 
         <ImageView android:layout_width="10dp"
                    android:layout_height="18dp"
-                   android:background="@drawable/ble_title"
+                   android:background="@drawable/file_list"
                    android:layout_marginRight="24dp"/>
 
 
@@ -28,7 +28,20 @@
                 android:textColor="#000000"
                 android:textSize="20sp"
                 />
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right" >
 
+            <CheckBox android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+
+                      android:id="@+id/select_all_checkout"
+                      android:clickable="true"
+                      android:focusable="false"
+                      android:focusableInTouchMode="false"
+                    />
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView android:layout_width="match_parent"
@@ -41,7 +54,7 @@
             android:layout_height="@dimen/ble_size_of_file_list"
             android:background="@color/ble_blackgroud"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp">
+            android:layout_marginRight="0dp">
 
     </FrameLayout>
 
@@ -50,22 +63,19 @@
                android:background="@drawable/ble_list_line_up"
                android:layout_marginTop="-5dp"
             />
-    <LinearLayout android:layout_width="wrap_content" 
+    <LinearLayout android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        <Button android:layout_width="wrap_content" 
-                android:layout_height="wrap_content"
-                android:id="@+id/selecte_all"
-                android:text="Select All"
-                android:layout_marginLeft="50dp"
-                android:background="@color/ring_color"/>
-        <Button android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upload File"
+                  android:gravity="right"
+                  >
+
+        <Button android:layout_width="110dp"
+                android:layout_height="48dp"
+
                 android:id="@+id/upload"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_gravity="center"
+
+                android:layout_marginRight="5dp"
+                android:text="Upload File"
+                android:textStyle="bold"
                 android:background="@color/ring_color"/>
             
     </LinearLayout>

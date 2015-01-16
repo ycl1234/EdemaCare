@@ -33,6 +33,10 @@
                 >
 
         </activity>
+        <activity android:name="com.timeszoro.edemacare.FileUploadActivity"
+                  android:label="File Upload">
+
+        </activity>
         <service android:name="com.timeszoro.service.TimerService"
                  >
         </service>
