@@ -81,6 +81,13 @@ public class FileUploadActivity extends FragmentActivity implements View.OnClick
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Data of the Edema Measurement");
                 intent.putExtra(Intent.EXTRA_TEXT, "Mail with multiple attachments");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"wgjing307@yeah.net"});
+                for (int i = 0; i < files.size()-1; i++) {  
+                    for (int j = files.size()-1; j > i; j--) {  
+                        if (files.get(j).equals(files.get(i))) {  
+                        	files.remove(j);  
+                        }  
+                    }  
+                }  
 
                 ArrayList<Uri> uris = new ArrayList<Uri>();
                 for(File f: files){
