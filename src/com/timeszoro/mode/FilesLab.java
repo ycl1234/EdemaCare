@@ -37,7 +37,11 @@ public class FilesLab {
 
 
     public  ArrayList<File> getFileList(){
-        
+//        if (mFiles.size() != 0) mFiles.clear();
         return mFiles;
+    }
+
+    public static void setFileLabNull(){
+        mFileLab = null;
     }
 }
