@@ -85,6 +85,11 @@ public class BledeviceActivity extends FragmentActivity {
 		
 	}
 
+        @Override
+	protected void onResume() {
+		super.onResume();
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
