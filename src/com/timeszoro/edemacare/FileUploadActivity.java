@@ -39,6 +39,7 @@ public class FileUploadActivity extends FragmentActivity implements View.OnClick
         File[] files = new File(dbPath).listFiles();
         mFileLab = FilesLab.getFileLab(this);
         mFileList = mFileLab.getFileList();
+        if(mFileList.size() != 0) mFileList.clear();
         if(files != null){
             for(File f: files){
                 if(!f.getName().endsWith("journal")){

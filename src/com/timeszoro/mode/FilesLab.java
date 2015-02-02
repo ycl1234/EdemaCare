@@ -29,7 +29,7 @@ public class FilesLab {
 
     public static FilesLab getFileLab(Context context){
         if(mFileLab == null){
-            mFileLab = (FilesLab) new FilesLab(context.getApplicationContext());
+            mFileLab = (FilesLab) new FilesLab(context);
         }
         return mFileLab;
     }
@@ -37,6 +37,7 @@ public class FilesLab {
 
 
     public  ArrayList<File> getFileList(){
+        
         return mFiles;
     }
 }
