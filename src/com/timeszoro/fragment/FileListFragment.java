@@ -23,6 +23,22 @@ public class FileListFragment extends ListFragment{
     private static final String TAG  = "File List Fragment";
     private ArrayList<File> mFiles;
     private static FileListAdapter mFileAdapter;
+    
+    @Override
+    public void onAttach(Activity activity) {  
+        super.onAttach(activity);  
+        if(mFiles!=null){
+        for (int i = 0; i <  mFiles.size()-1; i++) {  
+            for (int j =  mFiles.size()-1; j > i; j--) {  
+                if (mFiles.get(j).equals( mFiles.get(i))) {  
+                	 mFiles.remove(j);  
+                }  
+            }  
+        } 
+        }
+        Log.d(TAG, "onAttach");  
+    }  
+  
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +49,24 @@ public class FileListFragment extends ListFragment{
 
         this.setListAdapter(mFileAdapter);
     }
+    
+    @Override  
+    public void onStop() {  
+        super.onStop();  
+        for(int i=0; i<mFiles.size();i++){
+			mFiles.remove(i); 
+		}
+        Log.d(TAG, "onStop");  
+    }  
+    
+    @Override
+    public void onDestroyView() {  
+        super.onDestroyView();  
+        for(int i=0; i<mFiles.size();i++){
+			mFiles.remove(i); 
+		}
+        Log.d(TAG, "onDestroyView");  
+    }  
 
 
     @Override
