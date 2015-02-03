@@ -9,6 +9,9 @@
 	
 	<!-- ble paraments -->
 	<string name="scan_interval">5000</string>
+	
+	 <!-- ble disconnection -->
+	<string name="ble_disconnection">蓝牙连接断开</string>
 
 	
 	
@@ -23,6 +26,8 @@
 	<!-- the device scan -->
 	<string name="ble_not_supported">BLE is not supported</string>
 	<string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+	 
+	 
 
 
 	<!--broadcast name-->
