@@ -89,16 +89,32 @@ public class BledeviceActivity extends FragmentActivity {
 	protected void onResume() {
 		super.onResume();
 		//enable the ble
-		if (!mBleAdapter.isEnabled()) {
+	/*	if (!mBleAdapter.isEnabled()) {
 			if (!mBleAdapter.isEnabled()) {
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 				startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 			}
 		}
 		//enable the scan button
-		mScanProFragment.getmScanImg().setEnabled(true);
+		mScanProFragment.getmScanImg().setEnabled(true);*/
 
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (!mBleAdapter.isEnabled()) {
+			
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivity(enableBtIntent);
+		
+	}
+	//enable the scan button
+	mScanProFragment.getmScanImg().setEnabled(true);
+
+		
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
