@@ -283,6 +283,7 @@ public class EdemaActivity extends Activity implements OnChartValueSelectedListe
                 mConnected = true;
                 Log.d(CONNECT_STATUS, getString(R.string.connected));
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                Toast.makeText(getApplicationContext(), R.string.ble_disconnection, Toast.LENGTH_SHORT).show();
                 mConnected = false;
                 Log.d(CONNECT_STATUS, getString(R.string.disconnected));
                 clearUI();
